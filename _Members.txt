@@ -16,11 +16,8 @@
 16. Đào Thị Thùy Dương
 17. Lê Nhữ Hoàng
 18. Zơ râm Nhỏ
-<<<<<<< HEAD
 19. Nguyễn Đình Tuấn
 20. Đỗ Tiến Mạnh
 21. Đặng Thị Tâm Nhi
 22. Hồ Thị Thanh Bình
-=======
->>>>>>> 1ca95a7 (update)
 23. Nguyễn Công Thành
