@@ -1,6 +1,6 @@
 1. Võ Việt Dũng
 2. Tôn Thất Bách
-3. Hồ Văn Diễn
+3. Hồ Văn Diễn.
 4. Đào Duy Khánh
 5. Nguyễn Tống Bảo Phúc
 6. Nguyễn Thành Doanh
@@ -11,3 +11,5 @@
 11. Nguyễn Hữu Khánh
 12. Trương Hữu Ngọc
 13. Lê Thị Thùy Linh
+14. Nguyễn Thị Huyền Trân
+15. Trương Đình Minh Hiếu
