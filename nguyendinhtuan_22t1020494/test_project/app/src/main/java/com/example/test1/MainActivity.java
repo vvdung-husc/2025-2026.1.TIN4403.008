@@ -1,5 +1,7 @@
 package com.example.test1;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
             }
             String msg = "Đã nhập thông tin tài khoản [" + user + "/" + pass + "]";
             Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
+        }
+    }
+    public class CButtonRegister implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            //Toast.makeText(getApplicationContext(),"::onClick...",Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(i);
         }
     }
 }
