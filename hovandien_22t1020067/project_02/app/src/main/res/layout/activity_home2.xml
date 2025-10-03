@@ -2,16 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
+    android:gravity="center"
     android:padding="24dp">
 
     <TextView
-        android:id="@+id/tvWelcome"
+        android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Xin chào, bạn đã đăng nhập thành công!"
-        android:textSize="20sp"
+        android:text="Đăng nhập thành công!"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="#000000"/>
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"/>
 </LinearLayout>
