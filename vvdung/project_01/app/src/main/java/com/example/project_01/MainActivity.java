@@ -1,5 +1,7 @@
 package com.example.project_01;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -17,7 +20,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     EditText m_edtUser,m_edtPass; //Biến điều khiển EditText**
-    Button m_btnLogin; //Biến điều khiển Button
+    Button m_btnLogin,m_btnRegister; //Biến điều khiển Button
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +32,13 @@ public class MainActivity extends AppCompatActivity {
         m_edtUser = (EditText)findViewById(R.id.edtUsername);
         m_edtPass = (EditText)findViewById(R.id.edtPassword);
         m_btnLogin = (Button) findViewById(R.id.btnLogin);
+        m_btnRegister = (Button)findViewById(R.id.btnRegister);
 
         //Cài đặt sự kiện Click cho Button Login
         m_btnLogin.setOnClickListener(new CButtonLogin());
 
+        //Cài đặt sự kiện Click cho Button Register
+        m_btnRegister.setOnClickListener(new CButtonRegister());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -58,4 +64,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public class CButtonRegister implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {//Hàm sử lý sự kiện click button register
+            //Toast.makeText(getApplicationContext(),"::onClick...",Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(i);
+        }
+    }
 }
