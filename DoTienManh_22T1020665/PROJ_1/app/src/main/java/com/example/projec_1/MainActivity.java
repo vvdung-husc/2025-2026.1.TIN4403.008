@@ -1,4 +1,5 @@
 package com.example.projec_1;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -17,8 +19,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     EditText m_edtUser,m_edtPass; //Biến điều khiển EditText**
-    Button m_btnLogin; //Biến điều khiển Button
-    Button m_btnRegister;
+    Button m_btnLogin,m_btnRegister; //Biến điều khiển Button
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +31,13 @@ public class MainActivity extends AppCompatActivity {
         m_edtUser = (EditText)findViewById(R.id.edtUsername);
         m_edtPass = (EditText)findViewById(R.id.edtPassword);
         m_btnLogin = (Button) findViewById(R.id.btnLogin);
-        m_btnRegister = (Button) findViewById(R.id.btnRegister);
+        m_btnRegister = (Button)findViewById(R.id.btnRegister);
+
         //Cài đặt sự kiện Click cho Button Login
         m_btnLogin.setOnClickListener(new CButtonLogin());
-// [ADD] Sự kiện mở màn hình đăng ký
-        m_btnRegister.setOnClickListener(v -> {
-            // TODO: đổi RegisterActivity.class nếu bạn đặt tên khác, ví dụ SignUpActivity.class
-            Intent i = new Intent(MainActivity.this, RegisterActivity.class);
-            startActivity(i);
-        });
 
+        //Cài đặt sự kiện Click cho Button Register
+        m_btnRegister.setOnClickListener(new CButtonRegister());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -62,8 +60,22 @@ public class MainActivity extends AppCompatActivity {
             //apiLogin(user,pass);
             String msg = "Đã nhập thông tin tài khoản [" + user + "/" + pass + "]";
             Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
+            //xu ly su kien sau khi dang nhap
+            Intent i = new Intent(MainActivity.this, UserActivity.class);
+            i.putExtra("username", user);
+            startActivity(i);
+
         }
+
     }
 
+    public class CButtonRegister implements View.OnClickListener {
 
+        @Override
+        public void onClick(View v) {//Hàm sử lý sự kiện click button register
+            //Toast.makeText(getApplicationContext(),"::onClick...",Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(i);
+        }
+    }
 }
