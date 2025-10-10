@@ -11,6 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projec_1">
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".UserActivity" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
