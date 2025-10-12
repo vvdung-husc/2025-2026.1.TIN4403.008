@@ -57,5 +57,13 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
         }
     }
+    public class CButtonRegister implements View.OnClickListener {
 
+        @Override
+        public void onClick(View v) {//Hàm sử lý sự kiện click button register
+            //Toast.makeText(getApplicationContext(),"::onClick...",Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getApplicationContext(), register.class);
+            startActivity(i);
+        }
+    }
 }
