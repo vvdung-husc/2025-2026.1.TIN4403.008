@@ -5,16 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import okhttp3.*;
+import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity {
-
     TextView txtWelcome;
-    EditText edtUserHome, edtPassHome;
-    Button btnLoginHome, btnInfo, btnLogout;
+    Button btnInfo, btnLogout;
+    OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,53 +20,50 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         txtWelcome = findViewById(R.id.txtWelcome);
-        edtUserHome = findViewById(R.id.edtUserHome);
-        edtPassHome = findViewById(R.id.edtPassHome);
-        btnLoginHome = findViewById(R.id.btnLoginHome);
         btnInfo = findViewById(R.id.btnInfo);
         btnLogout = findViewById(R.id.btnLogout);
 
         String username = getIntent().getStringExtra("username");
-        if(username != null){
+        String token = getIntent().getStringExtra("token");
+
+        if (username != null) {
             txtWelcome.setText("Xin chào, " + username + "!");
         }
 
-        // Đăng nhập tại Home
-        btnLoginHome.setOnClickListener(v -> {
-            String user = edtUserHome.getText().toString().trim();
-            String pass = edtPassHome.getText().toString().trim();
-            if(user.equals("admin") && pass.equals("123")){
-                Toast.makeText(this, "Đăng nhập Home thành công!", Toast.LENGTH_SHORT).show();
-                txtWelcome.setText("Xin chào, " + user + "!");
-            } else {
-                Toast.makeText(this, "Sai tài khoản hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // Xem thông tin
         btnInfo.setOnClickListener(v -> {
-            new AlertDialog.Builder(this)
-                    .setTitle("Thông tin")
-                    .setMessage("Tên đăng nhập hiện tại: " + txtWelcome.getText().toString())
-                    .setPositiveButton("OK", null)
-                    .show();
+            String url = AppConfig.getBaseUrl(this) + "/api/userinfo";
+            Request req = new Request.Builder()
+                    .url(url)
+                    .addHeader("token", token)
+                    .post(RequestBody.create("", null))
+                    .build();
+
+            client.newCall(req).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    runOnUiThread(() -> Toast.makeText(HomeActivity.this, "Không kết nối được server!", Toast.LENGTH_SHORT).show());
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String resp = response.body().string();
+                    runOnUiThread(() -> new AlertDialog.Builder(HomeActivity.this)
+                            .setTitle("Thông tin tài khoản")
+                            .setMessage(resp)
+                            .setPositiveButton("OK", null)
+                            .show());
+                }
+            });
         });
 
-        // Đăng xuất
-        btnLogout.setOnClickListener(v -> {
-            new AlertDialog.Builder(this)
-                    .setTitle("Xác nhận")
-                    .setMessage("Bạn có muốn đăng xuất không?")
-                    .setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    })
-                    .setNegativeButton("Không", null)
-                    .show();
-        });
+        btnLogout.setOnClickListener(v -> new AlertDialog.Builder(this)
+                .setTitle("Đăng xuất")
+                .setMessage("Bạn có muốn đăng xuất không?")
+                .setPositiveButton("Có", (DialogInterface d, int w) -> {
+                    startActivity(new Intent(this, MainActivity.class));
+                    finish();
+                })
+                .setNegativeButton("Không", null)
+                .show());
     }
 }
