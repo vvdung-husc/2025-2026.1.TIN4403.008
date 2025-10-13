@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.baitap"
+    namespace = "com.example.project03"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.baitap"
+        applicationId = "com.example.project03"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -40,5 +40,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
