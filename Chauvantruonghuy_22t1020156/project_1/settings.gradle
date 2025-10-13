@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "projects1"
-include(":app")
+rootProject.name = "Project_1"
+include ':app'
