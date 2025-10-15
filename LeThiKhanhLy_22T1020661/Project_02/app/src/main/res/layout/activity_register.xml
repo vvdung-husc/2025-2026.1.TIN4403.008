@@ -7,78 +7,81 @@
     android:layout_height="match_parent"
     android:padding="24dp"
     android:background="#F5F5F5"
-    tools:context=".MainActivity">
+    tools:context=".RegisterActivity">
 
-    <!-- Tiêu đề -->
     <TextView
-        android:id="@+id/tvTitle"
+        android:id="@+id/tvRegisterTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Đăng nhập"
-        android:textSize="28sp"
+        android:text="Đăng ký tài khoản"
+        android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="#333333"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="80dp" />
+        android:layout_marginTop="50dp"/>
 
-    <!-- Nhập tên tài khoản -->
     <EditText
-        android:id="@+id/edtUsername"
+        android:id="@+id/edtName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Tên tài khoản"
-        android:inputType="textPersonName"
+        android:hint="Họ và tên"
         android:padding="12dp"
         android:background="@drawable/edittext_bg"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="40dp" />
+        android:layout_marginTop="30dp"/>
 
-    <!-- Nhập mật khẩu -->
     <EditText
-        android:id="@+id/edtPassword"
+        android:id="@+id/edtPhone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Mật khẩu"
-        android:inputType="textPassword"
+        android:hint="Số điện thoại"
+        android:inputType="phone"
         android:padding="12dp"
         android:background="@drawable/edittext_bg"
-        app:layout_constraintTop_toBottomOf="@id/edtUsername"
+        app:layout_constraintTop_toBottomOf="@id/edtName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="15dp"/>
 
-    <!-- Nút đăng nhập -->
-    <Button
-        android:id="@+id/btnLogin"
+    <EditText
+        android:id="@+id/edtEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Đăng Nhập"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:backgroundTint="#4CAF50"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/edtPassword"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:background="@drawable/edittext_bg"
+        app:layout_constraintTop_toBottomOf="@id/edtPhone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="15dp"/>
 
-    <!-- Nút đăng ký mới -->
-    <Button
-        android:id="@+id/btnRegister"
+    <EditText
+        android:id="@+id/edtAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Đăng ký mới"
+        android:hint="Địa chỉ"
+        android:padding="12dp"
+        android:background="@drawable/edittext_bg"
+        app:layout_constraintTop_toBottomOf="@id/edtEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="15dp"/>
+
+    <Button
+        android:id="@+id/btnRegisterSubmit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Đăng ký"
         android:textAllCaps="false"
-        android:textSize="16sp"
         android:backgroundTint="#2196F3"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/btnLogin"
+        app:layout_constraintTop_toBottomOf="@id/edtAddress"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="15dp" />
-
+        android:layout_marginTop="30dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.project_02;
 
 import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,19 +22,28 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
 
+        // Xử lý nút đăng nhập
         btnLogin.setOnClickListener(v -> {
-            String user = edtUsername.getText().toString();
-            String pass = edtPassword.getText().toString();
+            String user = edtUsername.getText().toString().trim();
+            String pass = edtPassword.getText().toString().trim();
 
-            if(user.isEmpty() || pass.isEmpty()) {
+            if (user.isEmpty() || pass.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+
+                // Chuyển sang HomeActivity
+                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                startActivity(intent);
+
+                finish();
             }
         });
 
-        btnRegister.setOnClickListener(v ->
-                Toast.makeText(this, "Chuyển đến trang đăng ký", Toast.LENGTH_SHORT).show()
-        );
+        // Xử lý nút đăng ký
+        btnRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
     }
 }
