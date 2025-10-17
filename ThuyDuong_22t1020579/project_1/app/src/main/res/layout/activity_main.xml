@@ -47,11 +47,12 @@
         app:layout_constraintVertical_bias="0.1" />
 
     <!-- ✅ Thêm nút Đăng ký -->
+
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="32dp"
         android:padding="10dp"
         android:text="Đăng nhập"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +64,7 @@
         android:id="@+id/btnRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:padding="10dp"
         android:text="Đăng ký"
         app:layout_constraintEnd_toEndOf="parent"
