@@ -5,57 +5,58 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    tools:layout_editor_absoluteX="87dp"
-    tools:layout_editor_absoluteY="-108dp">
-
-    <Button
-        android:id="@+id/Tổng"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="212dp"
-        android:text="Tổng!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.436"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.749" />
-
-    <EditText
-        android:id="@+id/testNhapA"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="nhập A"
-        tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="168dp" />
-
-    <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/textNhapB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="nhập B"
-        tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="284dp" />
+    tools:context=".MainActivity">
 
     <EditText
         android:id="@+id/textKetQua"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:hint="Kết quả"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/textNhapB"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textNhapB"
+        app:layout_constraintTop_toBottomOf="@+id/textNhapB" />
+
+    <EditText
+        android:id="@+id/textNhapA"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="188dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Nhập A"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/textNhapB"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Nhập B"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/textNhapA"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textNhapA"
+        app:layout_constraintTop_toBottomOf="@+id/textNhapA" />
+
+    <Button
+        android:id="@+id/btnTong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Kết quả"
-        tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="400dp" />
+        android:layout_marginTop="36dp"
+        android:text="Tổng!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textKetQua" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
