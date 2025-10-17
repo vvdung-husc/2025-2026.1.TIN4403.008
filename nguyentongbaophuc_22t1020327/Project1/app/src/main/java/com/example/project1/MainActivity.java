@@ -30,9 +30,9 @@ import okhttp3.MediaType;
 
 public class MainActivity extends AppCompatActivity {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    static String   _userNameLogined;
-    EditText m_edtUser,m_edtPass;
-    Button m_btnLogin;
+    static String _userNameLogined;
+    EditText m_edtUser, m_edtPass;
+    Button m_btnLogin, m_btnRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        m_edtUser = (EditText)findViewById(R.id.edtUsername);
-        m_edtPass = (EditText)findViewById(R.id.edtPassword);
+        m_edtUser = (EditText) findViewById(R.id.edtUsername);
+        m_edtPass = (EditText) findViewById(R.id.edtPassword);
         m_btnLogin = (Button) findViewById(R.id.btnLogin);
         m_btnRegister = (Button) findViewById(R.id.btnRegister);
 
@@ -56,18 +56,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public class CButtonLogin  implements View.OnClickListener {
+    public class CButtonLogin implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             String user = m_edtUser.getText().toString();
             String pass = m_edtPass.getText().toString();
-            Log.d("K46","CLICK BUTTON LOGIN ACCOUNT " + user + "/" + pass);
-            if (user.length() < 3 || pass.length() < 6){
-                Toast.makeText(getApplicationContext(),"Tài khoản hoặc mật khẩu không hợp lệ!",Toast.LENGTH_SHORT).show();
+            Log.d("K46", "CLICK BUTTON LOGIN ACCOUNT " + user + "/" + pass);
+            if (user.length() < 3 || pass.length() < 6) {
+                Toast.makeText(getApplicationContext(), "Tài khoản hoặc mật khẩu không hợp lệ!", Toast.LENGTH_SHORT).show();
                 return;
             }
             try {
-                apiLogin(user,pass);
+                apiLogin(user, pass);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -95,22 +95,23 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call call, IOException e) {
                 call.cancel();
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String myResponse = response.body().string();
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("K46",myResponse);
+                        Log.d("K46", myResponse);
                     }
                 });
             }
         });
     }
 
-    void doPost(String url,String json) throws IOException {
+    void doPost(String url, String json) throws IOException {
         OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create(json,JSON);
+        RequestBody body = RequestBody.create(json, JSON);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
@@ -124,17 +125,18 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("K46",response.body().string());
+                Log.d("K46", response.body().string());
             }
         });
     }
+
     //Hàm dịch vụ Login
     void apiLogin(String user, String pass) throws IOException {
-        String json = "{\"username\":\"" + user + "\",\"password\":\"" + pass +"\"}";
-        Toast.makeText(getApplicationContext(),json,Toast.LENGTH_SHORT).show();
-        Log.d("K46",json);
+        String json = "{\"username\":\"" + user + "\",\"password\":\"" + pass + "\"}";
+        Toast.makeText(getApplicationContext(), json, Toast.LENGTH_SHORT).show();
+        Log.d("K46", json);
 
-        RequestBody body = RequestBody.create(json,JSON);
+        RequestBody body = RequestBody.create(json, JSON);
         Request request = new Request.Builder()
                 .url("https://dev.husc.edu.vn/tin4403/api/login")
                 .post(body)
@@ -144,28 +146,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 String errStr = "Tài khoản hoặc mật khẩu không chính xác.\n" + e.getMessage();
-                Log.d("K46","onFailure\n" + errStr);
-                Toast.makeText(getApplicationContext(),errStr,Toast.LENGTH_SHORT).show();
+                Log.d("K46", "onFailure\n" + errStr);
+                Toast.makeText(getApplicationContext(), errStr, Toast.LENGTH_SHORT).show();
                 call.cancel();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String errStr = "Tài khoản hoặc mật khẩu không chính xác.\n" + response.body().string();
-                Log.d("K46",errStr);
-                if (!response.isSuccessful()){
+                Log.d("K46", errStr);
+                if (!response.isSuccessful()) {
                     MainActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(),errStr,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), errStr, Toast.LENGTH_SHORT).show();
                         }
                     });
                     return;
                 }
 
-                Intent intent = new Intent(getApplicationContext(),UserActivity.class);
+                Intent intent = new Intent(getApplicationContext(), UserActivity.class);
                 startActivity(intent);
 
             }
         });
+    }
 }
