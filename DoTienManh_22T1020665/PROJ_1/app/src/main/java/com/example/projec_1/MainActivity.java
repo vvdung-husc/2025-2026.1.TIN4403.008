@@ -17,7 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity {
+public class    MainActivity extends AppCompatActivity {
     EditText m_edtUser,m_edtPass; //Biến điều khiển EditText**
     Button m_btnLogin,m_btnRegister; //Biến điều khiển Button
 
