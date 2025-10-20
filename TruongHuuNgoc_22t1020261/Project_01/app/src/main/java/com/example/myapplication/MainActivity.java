@@ -15,10 +15,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -29,6 +33,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     static String _userNameLogined;
+    static String _token;
     EditText m_edtUser,m_edtPass; //Biến điều khiển EditText**
     Button m_btnLogin,m_btnRegister; //Biến điều khiển Button
 
@@ -83,9 +88,16 @@ public class MainActivity extends AppCompatActivity {
             Log.d("K46",json);
 
             RequestBody body = RequestBody.create(json,JSON);
+
+            RequestBody formBody = new FormBody.Builder()
+                    .add("username",user)
+                    .add("password",pass)
+                    .build();
+
             Request request = new Request.Builder()
                     .url("https://dev.husc.edu.vn/tin4403/api/login")
-                    .post(body)
+//                    .post(body)
+                    .post(formBody)
                     .build();
             OkHttpClient client = new OkHttpClient();
             client.newCall(request).enqueue(new Callback() {
@@ -94,25 +106,71 @@ public class MainActivity extends AppCompatActivity {
                     String errStr = "Tài khoản hoặc mật khẩu không chính xác.\n" + e.getMessage();
                     Log.d("K46","onFailure\n" + errStr);
                     Toast.makeText(getApplicationContext(),errStr,Toast.LENGTH_SHORT).show();
-                    call.cancel();
                 }
 
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    String errStr = "Tài khoản hoặc mật khẩu không chính xác.\n" + response.body().string();
-                    Log.d("K46",errStr);
-                    if (!response.isSuccessful()){
-                        MainActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(),errStr,Toast.LENGTH_SHORT).show();
+//                    String errStr = "Tài khoản hoặc mật khẩu không chính xác.\n" + response.body().string();
+//                    Log.d("K46",errStr);
+//
+//                    _userNameLogined = user;
+//                    Intent intent = new Intent(getApplicationContext(),UserActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                    if (!response.isSuccessful()){
+//                        MainActivity.this.runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Toast.makeText(MainActivity.this,errStr,Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                        return;
+//                    }
+//                    try {
+//                        JSONObject jsonObject = new JSONObject(response.body().string());
+//                        Toast.makeText(MainActivity.this, jsonObject.optInt("r"), Toast.LENGTH_SHORT).show();
+//                        if(jsonObject.optInt("r") == 1){
+//                            _token = jsonObject.optString("token");
+////                            _userNameLogined = user;
+////                            Intent intent = new Intent(getApplicationContext(),UserActivity.class);
+////                            startActivity(intent);
+////                            finish();
+//                        }
+//                        Toast.makeText(MainActivity.this, jsonObject.optInt("r"), Toast.LENGTH_SHORT).show();
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                        runOnUiThread(()-> Toast.makeText(getApplicationContext(), "Lỗi 2 ", Toast.LENGTH_SHORT).show());
+//
+//                    }
+                    if (response.isSuccessful() && response.body() != null) {
+                        String responseBody = response.body().string();
+                        try {
+                            JSONObject jsonResponse = new JSONObject(responseBody);
+                            if (jsonResponse.optInt("r") == 1) {
+                                _token = jsonResponse.optString("m");
+                                if (!_token.isEmpty()) {
+
+                                    runOnUiThread(() -> {
+                                        Toast.makeText(MainActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                                        _userNameLogined = user;
+                                        Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                                        startActivity(intent);
+                                        finish(); // Đóng MainActivity để người dùng không thể quay lại màn hình đăng nhập
+                                    });
+                                } else {
+                                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Lỗi: Không nhận được token.", Toast.LENGTH_SHORT).show());
+                                }
+                            } else {
+                                String message = jsonResponse.optString("m", "Đăng nhập thất bại.");
+                                runOnUiThread(() -> Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show());
                             }
-                        });
-                        return;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            runOnUiThread(() -> Toast.makeText(MainActivity.this, "Lỗi phân tích dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        }
+                    } else {
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Đăng nhập thất bại: " + response.message(), Toast.LENGTH_SHORT).show());
                     }
-                    _userNameLogined = user;
-                    Intent intent = new Intent(getApplicationContext(),UserActivity.class);
-                    startActivity(intent);
                 }
             });
         }

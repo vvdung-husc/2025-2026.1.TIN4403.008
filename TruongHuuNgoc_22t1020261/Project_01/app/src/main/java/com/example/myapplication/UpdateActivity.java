@@ -65,7 +65,7 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     private void ShowInfo() {
-        apiInfo();
+//        apiInfo();
     }
 
     public class ButtonSave implements View.OnClickListener {
@@ -85,7 +85,6 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     private void apiUpdate(String fullname, String pass, String email) {
-
 
     }
 
