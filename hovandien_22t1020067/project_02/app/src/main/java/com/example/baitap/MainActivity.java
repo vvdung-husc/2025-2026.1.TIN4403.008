@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject jsonResponse = new JSONObject(responseData);
 
                     int r = jsonResponse.optInt("r", 0);
-                    String token = jsonResponse.optString("m", "");
+                    String token = jsonResponse.optString("token", "");
 
                     runOnUiThread(() -> {
                         if (r == 1 && !token.isEmpty()) {

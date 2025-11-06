@@ -36,7 +36,7 @@ public class HomeActivity2 extends AppCompatActivity {
         // Nhận token từ màn hình đăng nhập
         String token = getIntent().getStringExtra("token");
 
-        if (token != null && !token.isEmpty()) {
+        if (token != null && token.length() > 0) {
             getUserInfo(token);
         } else {
             Toast.makeText(this, "Không có token, vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
@@ -53,15 +53,12 @@ public class HomeActivity2 extends AppCompatActivity {
     private void getUserInfo(String token) {
         new Thread(() -> {
             try {
-                // 🔹 Gửi yêu cầu POST kiểu x-www-form-urlencoded
                 RequestBody body = new FormBody.Builder()
                         .add("token", token)
                         .build();
 
                 Request request = new Request.Builder()
-                        // 👉 Nếu bạn chạy trên EMULATOR: dùng "http://10.0.2.2:5000"
-                        // 👉 Nếu bạn chạy trên ĐIỆN THOẠI THẬT: dùng IP thật như dưới đây
-                        .url("http://192.168.1.139:5000/userinfo")
+                        .url("http://192.168.1.139:5000/userinfo") // hoặc IP thật của PC
                         .post(body)
                         .build();
 
@@ -71,41 +68,34 @@ public class HomeActivity2 extends AppCompatActivity {
                     }
 
                     String resBody = response.body().string();
-                    JSONObject json = new JSONObject(resBody);
+                    System.out.println(">>> Response body: " + resBody);
 
-                    // 🔹 Xử lý dữ liệu phản hồi từ Flask
-                    JSONObject user = null;
-                    if (json.has("m")) {
-                        user = json.getJSONObject("m");
-                    } else if (json.has("user")) {
-                        user = json.getJSONObject("user");
+                    JSONObject json = new JSONObject(resBody);
+                    if (json.getInt("r") == 1 && json.has("m")) {
+                        JSONObject user = json.getJSONObject("m");
+
+                        String fullname = user.optString("fullname", "N/A");
+                        String username = user.optString("username", "N/A");
+                        String password = user.optString("password", "N/A");
+                        String email = user.optString("email", "N/A");
+
+                        String info = "👤 Họ và tên: " + fullname +
+                                "\n🧾 Tài khoản: " + username +
+                                "\n🔑 Mật khẩu: " + password +
+                                "\n📧 Email: " + email;
+
+                        runOnUiThread(() -> tvInfo.setText(info));
                     } else {
                         runOnUiThread(() ->
-                                Toast.makeText(HomeActivity2.this, "Không tìm thấy dữ liệu người dùng!", Toast.LENGTH_SHORT).show());
-                        return;
+                                Toast.makeText(HomeActivity2.this, "Không lấy được thông tin người dùng!", Toast.LENGTH_SHORT).show());
                     }
-
-                    String fullname = user.optString("fullname", "N/A");
-                    String username = user.optString("username", "N/A");
-                    String password = user.optString("password", "N/A");
-                    String email = user.optString("email", "N/A");
-
-                    String info = "👤 Họ và tên: " + fullname +
-                            "\n🧾 Tài khoản: " + username +
-                            "\n🔑 Mật khẩu: " + password +
-                            "\n📧 Email: " + email;
-
-                    runOnUiThread(() -> tvInfo.setText(info));
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() ->
-                        Toast.makeText(HomeActivity2.this, "Không thể kết nối server", Toast.LENGTH_SHORT).show());
-            } catch (JSONException e) {
-                e.printStackTrace();
-                runOnUiThread(() ->
-                        Toast.makeText(HomeActivity2.this, "Phản hồi JSON không hợp lệ", Toast.LENGTH_SHORT).show());
+                        Toast.makeText(HomeActivity2.this, "Lỗi khi kết nối hoặc xử lý dữ liệu", Toast.LENGTH_SHORT).show());
             }
         }).start();
     }
+
 }
