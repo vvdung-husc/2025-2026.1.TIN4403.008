@@ -17,10 +17,10 @@ var appRouter = function (app) {
   app.post("/login", function (req, res) {
 		var user = req.body.username;
     var pass = req.body.password;	  
-    if (user == "vvdung" && pass == '111222')
-    	res.status(200).send("ĐĂNG NHẬP THANH CONG [" + user + "/" + pass +"]");
+    if (user == "vvdung")
+    	res.status(200).send("HÀM ĐĂNG NHẬP [" + user + "/" + pass +"]");
 	  else		
-			res.status(200).send("FAILED - LOGIN API [" + user + "/" + pass +"]");
+			res.status(200).send("LOGIN API [" + user + "/" + pass +"]");
   });
   
   app.post("/register", function (req, res) {
