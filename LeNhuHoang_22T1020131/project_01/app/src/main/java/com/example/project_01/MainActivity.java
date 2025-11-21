@@ -18,7 +18,17 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
 
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.Callback;
+
 public class MainActivity extends AppCompatActivity {
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    static String   _userNameLogined;
     EditText m_edtUser, m_edtPass; //Biến điều khiển EditText**
     Button m_btnLogin, m_btnRegister; //Biến điều khiển Button
 
@@ -58,9 +68,13 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             //Gọi hàm dịch vụ Login
-            //apiLogin(user,pass);
-            String msg = "Đã nhập thông tin tài khoản [" + user + "/" + pass + "]";
-            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            try {
+                apiLogin(user,pass);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            //String msg = "Đã nhập thông tin tài khoản [" + user + "/" + pass + "]";
+            //Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -73,4 +87,108 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         }
     }
+
+    //Hàm mẫu sử dụng phương thức GET
+    void doGet(String url) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                call.cancel();
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String myResponse = response.body().string();
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //txtString.setText(myResponse);
+                        Log.d("K46",myResponse);
+                    }
+                });
+            }
+        });
+    }
+
+    //Hàm mẫu sử dụng phương thức POST
+    void doPost(String url,String json) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = RequestBody.create(json,JSON);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d("K43",response.body().string());
+            }
+        });
+    }
+    //Hàm dịch vụ Login
+    void apiLogin(String user, String pass) throws IOException {
+        //boolean bOk = (user.equals("vvdung") && pass.equals("123456"));
+        String json = "{\"username\":\"" + user + "\",\"password\":\"" + pass +"\"}";
+        Toast.makeText(getApplicationContext(),json,Toast.LENGTH_SHORT).show();
+        Log.d("K46",json);
+
+        RequestBody body = RequestBody.create(json,JSON);
+        Request request = new Request.Builder()
+                .url("https://dev.husc.edu.vn/tin4403/api/login") //.url("http://192.168.56.1:4380/login")
+                .post(body)
+                .build();
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                String errStr = "Tài khoản hoặc mật khẩu không chính xác.\n" + e.getMessage();
+                Log.d("K46","onFailure\n" + errStr);
+                Toast.makeText(getApplicationContext(),errStr,Toast.LENGTH_SHORT).show();
+                call.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String errStr = "Tài khoản hoặc mật khẩu không chính xác.\n" + response.body().string();
+                Log.d("K46",errStr);
+                if (!response.isSuccessful()){
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),errStr,Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    return;
+                }
+
+                Intent intent = new Intent(getApplicationContext(),UserActivity.class);
+                startActivity(intent);
+
+            }
+        });//client.newCall(request).enqueue(new Callback() {
+
+        /*if (bOk){
+            _userNameLogined = "Võ Việt Dũng";
+            Intent intent = new Intent(getApplicationContext(),UserActivity.class);
+            startActivity(intent);
+        }
+        else{
+            MainActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(),"Tài khoản hoặc mật khẩu không chính xác.",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }*/
+    }
+
 }
