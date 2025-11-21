@@ -19,15 +19,15 @@ import androidx.core.view.WindowInsetsCompat;
 import java.io.IOException;
 
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.Callback;
 
 public class MainActivity extends AppCompatActivity {
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     static String   _userNameLogined;
     EditText m_edtUser, m_edtPass; //Biến điều khiển EditText**
     Button m_btnLogin, m_btnRegister; //Biến điều khiển Button
@@ -68,21 +68,26 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             //Gọi hàm dịch vụ Login
-            //apiLogin(user,pass);
-            String msg = "Đã nhập thông tin tài khoản [" + user + "/" + pass + "]";
-            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            try {
+                apiLogin(user,pass);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            //String msg = "Đã nhập thông tin tài khoản [" + user + "/" + pass + "]";
+            //Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
         }
     }
 
     public class CButtonRegister implements View.OnClickListener {
 
         @Override
-        public void onClick(View v) {//Hàm xử lý sự kiện click button register
+        public void onClick(View v) {//Hàm sử lý sự kiện click button register
             //Toast.makeText(getApplicationContext(),"::onClick...",Toast.LENGTH_SHORT).show();
             Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
             startActivity(i);
         }
     }
+
     //Hàm mẫu sử dụng phương thức GET
     void doGet(String url) throws IOException {
         OkHttpClient client = new OkHttpClient();
@@ -164,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                     return;
                 }
-
+                _userNameLogined = user;
                 Intent intent = new Intent(getApplicationContext(),UserActivity.class);
                 startActivity(intent);
 
@@ -185,6 +190,5 @@ public class MainActivity extends AppCompatActivity {
             });
         }*/
     }
-
 
 }

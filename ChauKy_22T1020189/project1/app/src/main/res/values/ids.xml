@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="textView4" type="id">textView4</item>
+    <item name="edtPass1" type="id">edtPass1</item>
+    <item name="edtPass2" type="id">edtPass2</item>
+    <item name="edtUser" type="id">edtUser</item>
+    <item name="edtName" type="id">edtName</item>
+    <item name="btnCreateUser" type="id">btnCreateUser</item>
+    <item name="txtBack" type="id">txtBack</item>
+</resources>

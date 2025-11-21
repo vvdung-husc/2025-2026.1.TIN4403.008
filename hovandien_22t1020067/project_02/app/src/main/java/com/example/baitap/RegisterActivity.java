@@ -61,14 +61,14 @@ public class RegisterActivity extends AppCompatActivity {
     private void registerUser(String fullname, String username, String password, String email) {
         new Thread(() -> {
             try {
-                JSONObject json = new JSONObject();
-                json.put("fullname", fullname);
-                json.put("username", username);
-                json.put("password", password);
-                json.put("email", email);
+                RequestBody body = new okhttp3.FormBody.Builder()
+                        .add("fullname", fullname)
+                        .add("username", username)
+                        .add("password", password)
+                        .add("email", email)
+                        .build();
 
-                RequestBody body = RequestBody.create(json.toString(), JSON);
-                String apiUrl = "https://dev.husc.edu.vn/tin4403/api/register";
+                String apiUrl = "http://192.168.1.139:5000/register";
 
                 Request request = new Request.Builder()
                         .url(apiUrl)

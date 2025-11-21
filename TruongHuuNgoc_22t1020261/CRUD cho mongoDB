@@ -1,0 +1,46 @@
+---1. CREATE – Thêm mới
+Thêm 1 user
+db.users.insertOne({
+    username: "ngoc123",
+    password: "123456",
+    fullname: "Ngọc Trương"
+});
+
+Thêm nhiều user
+db.users.insertMany([
+    { username: "user1", password: "111111", fullname: "User One" },
+    { username: "user2", password: "222222", fullname: "User Two" }
+]);
+
+---2. READ – Tìm kiếm
+Tìm tất cả user
+db.users.find();
+
+Tìm theo username
+db.users.find({ username: "ngoc123" });
+
+Tìm 1 user theo username
+db.users.findOne({ username: "user1" });
+
+Tìm user theo fullname gần đúng (regex)
+db.users.find({ fullname: { $regex: /Ngọc/i } });
+
+---3. UPDATE – Chỉnh sửa
+Cập nhật mật khẩu của một user
+db.users.updateOne(
+    { username: "ngoc123" },
+    { $set: { password: "654321" } }
+);
+
+Cập nhật tên hiển thị của nhiều user
+db.users.updateMany(
+    { fullname: { $regex: /User/i } },
+    { $set: { fullname: "Updated Name" } }
+);
+
+---4. DELETE – Xóa dữ liệu
+Xóa 1 user
+db.users.deleteOne({ username: "user1" });
+
+Xóa nhiều user
+db.users.deleteMany({ fullname: "Updated Name" });
