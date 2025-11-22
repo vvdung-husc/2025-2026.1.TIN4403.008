@@ -1,0 +1,61 @@
+STT,Mã sinh viên,Họ,Tên,Ngày sinh,Khóa học,,,,,,,,,,,,,,,,
+1,22T1020543,Tôn Thất,Bách,03/12/2004,K46,,0,4,8,8,8,T,T,,,TT,báchtt_k46,bachtt_k46,020543,Tôn Thất Bách,1
+2,22T1020022,Nguyễn Kim,Bảng,29/05/2004,K46,,0,7,10,10,10,N,K,,,NK,bảngnk_k46,bangnk_k46,020022,Nguyễn Kim Bảng,1
+3,22T1020023,Phan Văn Tôn,Bảo,26/06/2004,K46,,0,5,9,12,12,P,V,T,,PVT,bảopvt_k46,baopvt_k46,020023,Phan Văn Tôn Bảo,1
+4,22T1020541,Hồ Xuân,Bắc,18/04/2004,K46,,0,3,7,7,7,H,X,,,HX,bắchx_k46,bachx_k46,020541,Hồ Xuân Bắc,1
+5,22T1020031,Hồ Thị Thanh,Bình,15/11/2004,K46,,0,3,7,12,12,H,T,T,,HTT,bìnhhtt_k46,binhhtt_k46,020031,Hồ Thị Thanh Bình,1
+6,22T1020067,Hồ Văn,Diễn,18/12/2004,K46,,0,3,6,6,6,H,V,,,HV,diễnhv_k46,dienhv_k46,020067,Hồ Văn Diễn,1
+7,22T1020071,Nguyễn Thành,Doanh,27/04/2004,K46,,0,7,12,12,12,N,T,,,NT,doanhnt_k46,doanhnt_k46,020071,Nguyễn Thành Doanh,1
+8,22T1020579,Đào Thị Thùy,Dương,20/10/2004,K46,,0,4,8,12,12,Đ,T,T,,ĐTT,dươngđtt_k46,duongdtt_k46,020579,Đào Thị Thùy Dương,1
+9,22T1020056,Nguyễn Hữu,Đạt,02/10/2003,K46,,0,7,10,10,10,N,H,,,NH,đạtnh_k46,datnh_k46,020056,Nguyễn Hữu Đạt,1
+10,22T1020569,Nguyễn Thành,Đạt,07/08/2004,K46,,0,7,12,12,12,N,T,,,NT,đạtnt_k46,datnt_k46,020569,Nguyễn Thành Đạt,1
+11,22T1020564,Nguyễn Văn Tiến,Đạt,02/06/2004,K46,,0,7,11,15,15,N,V,T,,NVT,đạtnvt_k46,datnvt_k46,020564,Nguyễn Văn Tiến Đạt,1
+12,22T1020106,Châu Văn,Hảo,14/02/2004,K46,,0,5,8,8,8,C,V,,,CV,hảocv_k46,haocv_k46,020106,Châu Văn Hảo,1
+13,22T1020604,Bùi Khắc,Hiếu,20/09/2004,K46,,0,4,8,8,8,B,K,,,BK,hiếubk_k46,hieubk_k46,020604,Bùi Khắc Hiếu,1
+14,22T1020116,Trương Đình Minh,Hiếu,07/07/2004,K46,,0,7,12,16,16,T,Đ,M,,TĐM,hiếutđm_k46,hieutdm_k46,020116,Trương Đình Minh Hiếu,1
+15,22T1020131,Lê Nhữ,Hoàng,30/10/2004,K46,,0,3,6,6,6,L,N,,,LN,hoàngln_k46,hoangln_k46,020131,Lê Nhữ Hoàng,1
+16,22T1020122,Nguyễn Việt,Hòa,04/11/2004,K46,,0,7,11,11,11,N,V,,,NV,hòanv_k46,hoanv_k46,020122,Nguyễn Việt Hòa,1
+17,22T1020156,Châu Văn Trường,Huy,28/02/2004,K46,,0,5,9,15,15,C,V,T,,CVT,huycvt_k46,huycvt_k46,020156,Châu Văn Trường Huy,1
+18,22T1020147,Võ Lê Tuấn,Hưng,20/03/2004,K46,,0,3,6,10,10,V,L,T,,VLT,hưngvlt_k46,hungvlt_k46,020147,Võ Lê Tuấn Hưng,1
+19,22T1020635,Ngô Trần Thuận,Khang,24/01/2004,K46,,0,4,9,14,14,N,T,T,,NTT,khangntt_k46,khangntt_k46,020635,Ngô Trần Thuận Khang,1
+20,22T1020171,Đào Duy,Khánh,12/08/2004,K46,,0,4,7,7,7,Đ,D,,,ĐD,khánhđd_k46,khanhdd_k46,020171,Đào Duy Khánh,1
+21,22T1020174,Nguyễn Hữu,Khánh,31/01/2004,K46,,0,7,10,10,10,N,H,,,NH,khánhnh_k46,khanhnh_k46,020174,Nguyễn Hữu Khánh,1
+22,22T1020641,Nguyễn Đăng,Khôi,07/03/2004,K46,,0,7,11,11,11,N,Đ,,,NĐ,khôinđ_k46,khoind_k46,020641,Nguyễn Đăng Khôi,1
+23,22T1020189,Châu,Kỳ,11/06/2004,K46,,0,4,4,4,4,C,,,,C,kỳc_k46,kyc_k46,020189,Châu Kỳ,1
+24,22T1020200,Lê Thị Thùy,Linh,23/04/2004,K46,,0,3,7,11,11,L,T,T,,LTT,linhltt_k46,linhltt_k46,020200,Lê Thị Thùy Linh,1
+25,21T1020499,Hoàng,Lực,29/01/2003,K45,,0,5,5,5,5,H,,,,H,lựch_k45,luch_k45,020499,Hoàng Lực,1
+26,22T1020661,Lê Thị Khánh,Ly,20/01/2004,K46,,0,3,7,12,12,L,T,K,,LTK,lyltk_k46,lyltk_k46,020661,Lê Thị Khánh Ly,1
+27,22T1020662,Ngô Thị Cẩm,Ly,12/03/2004,K46,,0,4,8,11,11,N,T,C,,NTC,lyntc_k46,lyntc_k46,020662,Ngô Thị Cẩm Ly,1
+28,22T1020665,Đỗ Tiến,Mạnh,19/01/2004,K46,,0,3,7,7,7,Đ,T,,,ĐT,mạnhđt_k46,manhdt_k46,020665,Đỗ Tiến Mạnh,1
+29,22T1020666,Nguyễn Thị Ngọc,Mây,06/08/2004,K46,,0,7,11,15,15,N,T,N,,NTN,mâyntn_k46,mayntn_k46,020666,Nguyễn Thị Ngọc Mây,1
+30,21T1080070,Huỳnh Văn,Minh,10/09/2003,K45,,0,6,9,9,9,H,V,,,HV,minhhv_k45,minhhv_k45,080070,Huỳnh Văn Minh,1
+31,22T1020232,Lê Ngọc,Minh,19/05/2004,K46,,0,3,7,7,7,L,N,,,LN,minhln_k46,minhln_k46,020232,Lê Ngọc Minh,1
+32,22T1020239,Lê Văn,Minh,19/12/2004,K46,,0,3,6,6,6,L,V,,,LV,minhlv_k46,minhlv_k46,020239,Lê Văn Minh,1
+33,22T1020261,Trương Hữu,Ngọc,27/06/2004,K46,,0,7,10,10,10,T,H,,,TH,ngọcth_k46,ngocth_k46,020261,Trương Hữu Ngọc,1
+34,22T1020685,Nguyễn Vỹ,Nguyên,22/02/2004,K46,,0,7,9,9,9,N,V,,,NV,nguyênnv_k46,nguyennv_k46,020685,Nguyễn Vỹ Nguyên,1
+35,22T1020688,Nguyễn Công,Nhân,11/03/2004,K46,,0,7,11,11,11,N,C,,,NC,nhânnc_k46,nhannc_k46,020688,Nguyễn Công Nhân,1
+36,22T1020281,Đậu Thiện,Nhật,16/06/2004,K46,,0,4,9,9,9,Đ,T,,,ĐT,nhậtđt_k46,nhatdt_k46,020281,Đậu Thiện Nhật,1
+37,22T1020693,Đặng Thị Tâm,Nhi,11/08/2004,K46,,0,5,9,12,12,Đ,T,T,,ĐTT,nhiđtt_k46,nhidtt_k46,020693,Đặng Thị Tâm Nhi,1
+38,22T1020298,Zơrâm,Nhỏ,12/07/1997,K46,,0,5,5,5,5,Z,,,,Z,nhỏz_k46,nhoz_k46,020298,Zơrâm Nhỏ,1
+39,22T1020299,Lương Thanh Ngọc,Như,05/02/2004,K46,,0,6,12,16,16,L,T,N,,LTN,nhưltn_k46,nhultn_k46,020299,Lương Thanh Ngọc Như,1
+40,22T1020313,Nguyễn Văn,Phong,30/05/2004,K46,,0,7,10,10,10,N,V,,,NV,phongnv_k46,phongnv_k46,020313,Nguyễn Văn Phong,1
+41,22T1020327,Nguyễn Tống Bảo,Phúc,28/10/2004,K46,,0,7,12,15,15,N,T,B,,NTB,phúcntb_k46,phucntb_k46,020327,Nguyễn Tống Bảo Phúc,1
+42,22T1020330,Lê Tăng,Phước,25/11/2004,K46,,0,3,7,7,7,L,T,,,LT,phướclt_k46,phuoclt_k46,020330,Lê Tăng Phước,1
+43,22T1020366,Nguyễn Văn Nhật,Quang,13/01/2004,K46,,0,7,11,15,15,N,V,N,,NVN,quangnvn_k46,quangnvn_k46,020366,Nguyễn Văn Nhật Quang,1
+44,22T1020354,Hoàng Anh,Quân,12/03/2004,K46,,0,6,9,9,9,H,A,,,HA,quânha_k46,quanha_k46,020354,Hoàng Anh Quân,1
+45,22T1020720,Bùi Quang,Quý,03/11/2004,K46,,0,4,9,9,9,B,Q,,,BQ,quýbq_k46,quybq_k46,020720,Bùi Quang Quý,1
+46,22T1020729,Huỳnh Tấn,Sang,02/02/2004,K46,,0,6,9,9,9,H,T,,,HT,sanght_k46,sanght_k46,020729,Huỳnh Tấn Sang,1
+47,22T1020410,Nguyễn Văn Nhật,Tân,01/01/2004,K46,,0,7,11,15,15,N,V,N,,NVN,tânnvn_k46,tannvn_k46,020410,Nguyễn Văn Nhật Tân,1
+48,22T1020746,Nguyễn Công,Thành,02/01/2004,K46,,0,7,11,11,11,N,C,,,NC,thànhnc_k46,thanhnc_k46,020746,Nguyễn Công Thành,1
+49,22T1020758,Huỳnh Thị,Thủy,07/11/2004,K46,,0,6,9,9,9,H,T,,,HT,thủyht_k46,thuyht_k46,020758,Huỳnh Thị Thủy,1
+50,21T1020733,Lê Khắc,Thức,14/11/2003,K45,,0,3,7,7,7,L,K,,,LK,thứclk_k45,thuclk_k45,020733,Lê Khắc Thức,1
+51,22T1020761,Nguyễn Huỳnh Minh,Tiến,27/11/2004,K46,,0,7,13,17,17,N,H,M,,NHM,tiếnnhm_k46,tiennhm_k46,020761,Nguyễn Huỳnh Minh Tiến,1
+52,22T1020767,Hồ Bảo,Toàn,26/02/2004,K46,,0,4,8,8,8,H,B,,,HB,toànhb_k46,toànhb_k46,020767,Hồ Bảo Toàn,1
+53,22T1020475,Nguyễn Thị Huyền,Trân,24/10/2004,K46,,0,7,11,16,16,N,T,H,,NTH,trânnth_k46,trannth_k46,020475,Nguyễn Thị Huyền Trân,1
+54,22T1020484,Đặng Hữu,Trung,14/04/2004,K46,,0,5,8,8,8,Đ,H,,,ĐH,trungđh_k46,trungdh_k46,020484,Đặng Hữu Trung,1
+55,22T1020486,Đinh Hoàng,Trung,21/10/2004,K46,,0,5,10,10,10,Đ,H,,,ĐH,trungđh_k46,trungdh,020486,Đinh Hoàng Trung,1
+56,22T1020494,Nguyễn Đình,Tuấn,29/09/2003,K46,,0,7,11,11,11,N,Đ,,,NĐ,tuấnnđ_k46,tuannd_k46,020494,Nguyễn Đình Tuấn,1
+57,22T1020497,Nguyễn Phú,Tuấn,17/08/2004,K46,,0,7,10,10,10,N,P,,,NP,tuấnnp_k46,tuannp_k46,020497,Nguyễn Phú Tuấn,1
+58,22T1020499,Phạm Anh,Tuấn,21/05/2004,K46,,0,5,8,8,8,P,A,,,PA,tuấnpa_k46,tuanpa_k46,020499,Phạm Anh Tuấn,1
+59,22T1020517,Phan Văn,Việt,20/07/2004,K46,,0,5,8,8,8,P,V,,,PV,việtpv_k46,vietpv_k46,020517,Phan Văn Việt,1
+60,22T1020534,Nguyễn Thị Ngọc,Ý,28/03/2004,K46,,0,7,11,15,15,N,T,N,,NTN,ýntn_k46,yntn_k46,020534,Nguyễn Thị Ngọc Ý,1

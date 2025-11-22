@@ -74,6 +74,10 @@ public class UserActivity extends AppCompatActivity {
 
     public void HienThi(){
         String token = MainActivity._token;
+        if (token == null || token.isEmpty()) {
+            Toast.makeText(this, "Thiếu token. Vui lòng đăng nhập lại.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         RequestBody formBody = new FormBody.Builder()
                 .add("token",token)
                 .build();
@@ -94,29 +98,6 @@ public class UserActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-//                if(!response.isSuccessful()){
-//                    UserActivity.this.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            try {
-//                                Toast.makeText(getApplicationContext(),"Token -> JSON không hợp lệ.\n" + response.body().string(),Toast.LENGTH_SHORT).show();
-//                            } catch (IOException e) {
-//                                throw new RuntimeException(e);
-//                            }
-//                        }
-//                    });
-//                    return;
-//                }
-//                try {
-//                    JSONObject jsonObject = new JSONObject(response.body().string());
-//                    if(jsonObject.optInt("r") == 1){
-//                        Toast.makeText(getApplicationContext(), jsonObject.optJSONArray("m").toString(), Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(getApplicationContext(),UserActivity.class);
-//                        startActivity(intent);
-//                    }
-//                } catch (JSONException e) {
-//                    throw new RuntimeException(e);
-//                }
                 if (response.isSuccessful() && response.body() != null) {
                     String responseBody = response.body().string();
                     try {

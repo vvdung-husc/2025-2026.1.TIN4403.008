@@ -110,38 +110,6 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-//                    String errStr = "Tài khoản hoặc mật khẩu không chính xác.\n" + response.body().string();
-//                    Log.d("K46",errStr);
-//
-//                    _userNameLogined = user;
-//                    Intent intent = new Intent(getApplicationContext(),UserActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                    if (!response.isSuccessful()){
-//                        MainActivity.this.runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                Toast.makeText(MainActivity.this,errStr,Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//                        return;
-//                    }
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(response.body().string());
-//                        Toast.makeText(MainActivity.this, jsonObject.optInt("r"), Toast.LENGTH_SHORT).show();
-//                        if(jsonObject.optInt("r") == 1){
-//                            _token = jsonObject.optString("token");
-////                            _userNameLogined = user;
-////                            Intent intent = new Intent(getApplicationContext(),UserActivity.class);
-////                            startActivity(intent);
-////                            finish();
-//                        }
-//                        Toast.makeText(MainActivity.this, jsonObject.optInt("r"), Toast.LENGTH_SHORT).show();
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                        runOnUiThread(()-> Toast.makeText(getApplicationContext(), "Lỗi 2 ", Toast.LENGTH_SHORT).show());
-//
-//                    }
                     if (response.isSuccessful() && response.body() != null) {
                         String responseBody = response.body().string();
                         try {
