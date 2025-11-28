@@ -1,4 +1,6 @@
-const DB = require("./database/ltdd_db.js")
+
+
+const DB = require("./_database/ltdd_db")
 
 var appRouter = function (app) {
 

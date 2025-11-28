@@ -23,7 +23,7 @@ CDBLTDD.prototype.Init = async function (callback) {
         //console.log(this.db_);
         console.log('...MONGO Actived : [' + this.db_.databaseName + ']');
 
-        const user = await this.getByUsername('duongdtt_k46','020579');
+        const user = await this.getByUsername('bachtt_k46','020543');
         console.log(user);
 
         callback();
@@ -33,11 +33,11 @@ CDBLTDD.prototype.Init = async function (callback) {
 }
 
 CDBLTDD.prototype.getUsers = async function(){
-  const users = await this.db_.collection("user").find().toArray();
+  const users = await this.db_.collection("users").find().toArray();
   return users;   // trả về mảng users
 }
 
 CDBLTDD.prototype.getByUsername = async function(user, pass){
-  const u = await this.db_.collection("user").findOne({ username: user, password: pass});
+  const u = await this.db_.collection("users").findOne({ username: user, password: pass});
   return u;   // trả về user hoặc null
 }
