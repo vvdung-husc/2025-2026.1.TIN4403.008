@@ -17,7 +17,7 @@ var appRouter = function (app) {
   app.post("/login", function (req, res) {
 		var user = req.body.username;
     var pass = req.body.password;	  
-    if (user == "vvdung")
+    if (user == "binhhtt" && pass == "020031")
     	res.status(200).send("HÀM ĐĂNG NHẬP [" + user + "/" + pass +"]");
 	  else		
 			res.status(200).send("LOGIN API [" + user + "/" + pass +"]");
