@@ -34,8 +34,32 @@ var appRouter = function (app) {
 		// 	res.status(200).send("FAILED - LOGIN API [" + user + "/" + pass +"]");
   });
   
-  app.post("/register", function (req, res) {
-    res.status(200).send("REGISTER API");
+  app.post("/register", async function (req, res) {
+    var user = req.body.username;
+    var pass = req.body.password;	 
+    var email = req.body.email;
+    var fullname = req.body.fullname;
+    const u = await DB.register(user, pass, email, fullname);
+    if (u){//ĐĂNG KÝ THÀNH CÔNG
+      res.status(200).json(u);
+    }
+    else{//ĐĂNG KÝ LỖI
+      res.status(302).send("FAILED - REGISTER API [" + user + "/" + pass +"]");
+    }
+  });
+
+  app.post("/update", async function (req, res){
+    var user = req.body.username;
+    var pass = req.body.password;	 
+    var email = req.body.email;
+    var fullname = req.body.fullname;
+    const u = await DB.update( user, pass, email, fullname);
+    if (u){//CẬP NHẬT THÀNH CÔNG
+      res.status(200).json(u);
+    }
+    else{//CẬP NHẬT LỖI
+      res.status(302).send("FAILED - UPDATE API [" + user + "/" + pass +"]");
+    }
   });
 
 }
