@@ -12,6 +12,7 @@
   "dependencies": {
     "async": "^3.2.6",
     "express": "^5.1.0",
+    "mongodb": "^7.0.0",
     "package": "^1.0.1"
   }
 }
