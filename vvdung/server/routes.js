@@ -21,7 +21,7 @@ var appRouter = function (app) {
   app.post("/login", async function (req, res) {
 		var user = req.body.username;
     var pass = req.body.password;	  
-    const u = await DB.getByUsername(user,pass);
+    const u = await DB.Authentication(user,pass);
     if (u){//ĐĂNG NHẬP THÀNH CÔNG
       res.status(200).json(u);
     }
