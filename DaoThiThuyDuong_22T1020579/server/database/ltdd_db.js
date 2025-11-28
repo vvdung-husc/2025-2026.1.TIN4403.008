@@ -19,7 +19,7 @@ CDBLTDD.prototype.Init = async function (callback) {
         console.log("Connected to MongoDB!");
         //console.log(this.client_);
 
-        this.db_ = this.client_.db("ltdd_ds"); // Replace "mydatabase" with your database name
+        this.db_ = this.client_.db("ltdd"); // Replace "mydatabase" with your database name
         //console.log(this.db_);
         console.log('...MONGO Actived : [' + this.db_.databaseName + ']');
 
@@ -33,11 +33,11 @@ CDBLTDD.prototype.Init = async function (callback) {
 }
 
 CDBLTDD.prototype.getUsers = async function(){
-  const users = await this.db_.collection("users").find().toArray();
+  const users = await this.db_.collection("user").find().toArray();
   return users;   // trả về mảng users
 }
 
 CDBLTDD.prototype.getByUsername = async function(user, pass){
-  const u = await this.db_.collection("users").findOne({ username: user, password: pass});
+  const u = await this.db_.collection("user").findOne({ username: user, password: pass});
   return u;   // trả về user hoặc null
 }
