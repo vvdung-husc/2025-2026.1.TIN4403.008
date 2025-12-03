@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.content.Intent;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,5 +58,13 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
         }
     }
+    public class CButtonRegister implements View.OnClickListener {
 
+        @Override
+        public void onClick(View v) {//Hàm sử lý sự kiện click button register
+            //Toast.makeText(getApplicationContext(),"::onClick...",Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getApplicationContext(), register.class);
+            startActivity(i);
+        }
+    }
 }

@@ -71,7 +71,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edtPassword" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnRegister"
         android:layout_width="291dp"
         android:layout_height="41dp"
         android:text="Đăng kí tài khoản mới"
