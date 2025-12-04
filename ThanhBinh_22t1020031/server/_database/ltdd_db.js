@@ -23,7 +23,7 @@ CDBLTDD.prototype.Init = async function (callback) {
         //console.log(this.db_);
         console.log('...MONGO Actived : [' + this.db_.databaseName + ']');
 
-        const user = await this.getByUsername('bachtt_k46','020543');
+        const user = await this.getByUsername('binhhtt_k46','020031');
         console.log(user);
 
         callback();
