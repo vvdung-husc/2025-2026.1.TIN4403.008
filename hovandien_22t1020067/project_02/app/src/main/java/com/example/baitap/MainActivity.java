@@ -63,13 +63,13 @@ public class MainActivity extends AppCompatActivity {
     private void loginUser(String username, String password) {
         new Thread(() -> {
             try {
-                JSONObject json = new JSONObject();
-                json.put("username", username);
-                json.put("password", password);
+                RequestBody body = new okhttp3.FormBody.Builder()
+                        .add("username", username)
+                        .add("password", password)
+                        .build();
 
-                RequestBody body = RequestBody.create(json.toString(), JSON);
                 Request request = new Request.Builder()
-                        .url("https://dev.husc.edu.vn/tin4403/api/login")
+                        .url("http://192.168.1.139:5000/login")//https://dev.husc.edu.vn/tin4403/api/login
                         .post(body)
                         .build();
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject jsonResponse = new JSONObject(responseData);
 
                     int r = jsonResponse.optInt("r", 0);
-                    String token = jsonResponse.optString("m", "");
+                    String token = jsonResponse.optString("token", "");
 
                     runOnUiThread(() -> {
                         if (r == 1 && !token.isEmpty()) {
