@@ -1,33 +1,16 @@
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const express = require('express');
-const app = express();
+var express = require('express');
+var routes = require("./routes.js");
+var DB = require("./_database/ltdd_db")
+var app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
-dotenv.config({ path: "./.env" });
+routes(app);
 
-process.on("uncaughtException", (err) => {
-  console.log("❌ Uncaught Exception:", err.message);
-  process.exit(1);
-});
-
-const DB = process.env.DATABASE.replace("<PASSWORD>", process.env.PASSWORD);
-
-mongoose
-  .connect(DB)
-  .then(() => console.log("✅ Kết nối thành công MongoDB Atlas!"))
-  .catch((err) => {
-    console.error("❌ Lỗi kết nối:", err.message);
-    process.exit(1);
-  });
-
-const port = process.env.PORT || 8000;
-const server = app.listen(port, () => {
-  console.log(`🚀 App running on port ${port}...`);
-});
-
-process.on("unhandledRejection", (err) => {
-  console.log("❌ Unhandled Rejection:", err.message);
-  server.close(() => process.exit(1));
+DB.Init(function (err, result){
+    if (err) process.exit(1);
+    var server = app.listen(4380, function () {
+        console.log("app running on port.", server.address().port);
+    });
 });

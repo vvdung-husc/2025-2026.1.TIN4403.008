@@ -18,17 +18,14 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
 
-import okhttp3.Call;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.Callback;
+import com.example.project_01.ApiClient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class MainActivity extends AppCompatActivity {
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    static String   _userNameLogined;
+    static String _token; //token nhận được khi login thành công
     EditText m_edtUser, m_edtPass; //Biến điều khiển EditText**
     Button m_btnLogin, m_btnRegister; //Biến điều khiển Button
 
@@ -69,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
             }
             //Gọi hàm dịch vụ Login
             try {
-                apiLogin(user,pass);
+                //apiLogin(user,pass);
+                okhttpLogin(user,pass);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -88,54 +86,43 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Hàm mẫu sử dụng phương thức GET
-    void doGet(String url) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                call.cancel();
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String myResponse = response.body().string();
-                MainActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //txtString.setText(myResponse);
-                        Log.d("K46",myResponse);
-                    }
-                });
-            }
-        });
-    }
-
-    //Hàm mẫu sử dụng phương thức POST
-    void doPost(String url,String json) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create(json,JSON);
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                call.cancel();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.d("K43",response.body().string());
-            }
-        });
-    }
     //Hàm dịch vụ Login
-    void apiLogin(String user, String pass) throws IOException {
+    void okhttpLogin(String user, String pass) throws IOException {
+        //boolean bOk = (user.equals("vvdung") && pass.equals("123456"));
+        String json = "{\"username\":\"" + user + "\",\"password\":\"" + pass +"\"}";
+        Toast.makeText(getApplicationContext(),json,Toast.LENGTH_SHORT).show();
+        Log.d("K46",json);
+
+        // chạy trên thread khác với UIThread để tránh bị treo ứng dụng
+        new Thread(() -> {
+            ApiClient.ApiResult r = ApiClient.httpPost("https://dev.husc.edu.vn/tin4403/api/login", json,null);
+
+            runOnUiThread(() -> {
+                if (r.success) {
+                    Toast.makeText(this, "OK: " + r.body, Toast.LENGTH_SHORT).show();
+
+                    try {
+                        JSONObject obj = new JSONObject(r.body);
+
+                        int ret = obj.getInt("r");
+                        String msg = obj.getString("m");   // m là Base64
+
+                        _token = msg;
+
+                        Intent i = new Intent(getApplicationContext(), UserActivity.class);
+                        startActivity(i);
+                    } catch (JSONException e) {
+                        Toast.makeText(this, "Lỗi ParseJSON ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else
+                    Toast.makeText(this, "ERR: " + r.body, Toast.LENGTH_SHORT).show();
+            });
+        }).start();
+
+    }
+
+    /*void apiLogin(String user, String pass) throws IOException {
         //boolean bOk = (user.equals("vvdung") && pass.equals("123456"));
         String json = "{\"username\":\"" + user + "\",\"password\":\"" + pass +"\"}";
         Toast.makeText(getApplicationContext(),json,Toast.LENGTH_SHORT).show();
@@ -175,20 +162,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });//client.newCall(request).enqueue(new Callback() {
-
-        /*if (bOk){
-            _userNameLogined = "Võ Việt Dũng";
-            Intent intent = new Intent(getApplicationContext(),UserActivity.class);
-            startActivity(intent);
-        }
-        else{
-            MainActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(),"Tài khoản hoặc mật khẩu không chính xác.",Toast.LENGTH_SHORT).show();
-                }
-            });
-        }*/
-    }
+    }*/
 
 }
