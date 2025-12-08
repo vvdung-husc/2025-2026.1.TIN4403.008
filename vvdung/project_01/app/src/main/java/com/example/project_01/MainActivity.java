@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         m_btnLogin = (Button) findViewById(R.id.btnLogin);
         m_btnRegister = (Button) findViewById(R.id.btnRegister);
 
+        m_edtUser.setText("yntn_k46");
+        m_edtPass.setText("020534");
+
         //Cài đặt sự kiện Click cho Button Login
         m_btnLogin.setOnClickListener(new CButtonLogin());
 
