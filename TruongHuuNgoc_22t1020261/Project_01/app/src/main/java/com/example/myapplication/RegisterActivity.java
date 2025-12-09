@@ -9,10 +9,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText edtUser, edtName, edtPass1, edtPass2;
@@ -62,8 +73,46 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Mật khẩu chưa khớp!",Toast.LENGTH_SHORT).show();
                 return;
             }
-            String message = "Đã đăng ký tài khoản [" + User + "/" + Name + "]";
-            Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+//            String message = "Đã đăng ký tài khoản [" + User + "/" + Name + "]";
+//            Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+            registerUser(User,Name,Pass1);
+        }
+
+        private void registerUser(String username, String fullname, String password) {
+            RequestBody formBody = new FormBody.Builder()
+                    .add("username",username)
+                    .add("fullname",fullname)
+                    .add("password",password)
+                    .build();
+            Request request = new Request.Builder()
+                    .url("https://dev.husc.edu.vn/tin4403/api/register")
+                    .post(formBody)
+                    .build();
+            OkHttpClient client = new OkHttpClient();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> Toast.makeText(RegisterActivity.this, "Lỗi kết nối: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+//                        String responseBody = response.body().string();
+                        // Xử lý phản hồi thành công từ server
+                        runOnUiThread(() -> {
+                            Toast.makeText(RegisterActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        });
+                    } else {
+                        String errorBody = response.body().string();
+                        runOnUiThread(() -> Toast.makeText(RegisterActivity.this, "Đăng ký thất bại: " + errorBody, Toast.LENGTH_LONG).show());
+                    }
+                }
+            });
         }
     }
 
