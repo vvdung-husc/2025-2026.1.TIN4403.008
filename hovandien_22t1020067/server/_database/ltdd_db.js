@@ -41,3 +41,24 @@ CDBLTDD.prototype.getByUsername = async function(user, pass){
   const u = await this.db_.collection("users").findOne({ username: user, password: pass});
   return u;   // trả về user hoặc null
 }
+/////////////////
+CDBLTDD.prototype.getByUsernameOnly = async function(user){
+  return await this.db_.collection("users").findOne({ username: user });
+};
+
+CDBLTDD.prototype.registerUser = async function(user, pass, fullname){
+  const result = await this.db_.collection("users").insertOne({
+    username: user,
+    password: pass,
+    fullname: fullname
+  });
+  return result.ops; // với MongoDB driver cũ, nếu driver mới thì result.insertedId
+};
+
+CDBLTDD.prototype.updateUser = async function(user, data){
+  const result = await this.db_.collection("users").updateOne(
+    { username: user },
+    { $set: data }
+  );
+  return result;
+};
