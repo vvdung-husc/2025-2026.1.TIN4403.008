@@ -86,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    // 🧩 Gọi API đăng ký người dùng mới
+    //Gọi API đăng ký người dùng mới
     void apiRegister(String user, String name, String email, String pass) throws IOException {
         OkHttpClient client = new OkHttpClient();
 
