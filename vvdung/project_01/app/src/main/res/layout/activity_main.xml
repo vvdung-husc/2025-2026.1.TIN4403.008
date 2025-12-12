@@ -78,7 +78,7 @@
         android:layout_width="290dp"
         android:layout_height="20dp"
         android:gravity="center_horizontal|center_vertical"
-        android:text="CNTT TIN K46"
+        android:text="CNTT TIN4403"
         app:layout_constraintBottom_toTopOf="@+id/btnRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.438"
