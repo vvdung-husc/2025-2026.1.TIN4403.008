@@ -11,7 +11,7 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="48dp"
         android:text="Đăng ký tài khoản mới"
         android:textColor="#E91E63"
         android:textSize="20sp"
@@ -76,7 +76,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edtUser" />
 
     <Button
-        android:id="@+id/btnCreateUser"
+        android:id="@+id/btnRegister"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
@@ -102,5 +102,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCreateUser" />
+        app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
 </androidx.constraintlayout.widget.ConstraintLayout>
