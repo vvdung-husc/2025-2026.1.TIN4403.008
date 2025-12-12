@@ -1,32 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    tools:context=".UserActivity">
 
     <TextView
-        android:id="@+id/txtWelcome"
-        android:layout_width="wrap_content"
+        android:id="@+id/txtFullname"
+        android:layout_width="290dp"
         android:layout_height="wrap_content"
-        android:text="Xin chào!"
-        android:textSize="24sp"
-        android:textColor="#9B0909"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="40dp"
+        android:text="Fullname"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnLogout"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="48dp"
+        android:text="Thoát"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/txtEmail"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/txtFullname"
+        app:layout_constraintTop_toBottomOf="@id/txtFullname" />
+
+    <TextView
+        android:id="@+id/txtNewEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="232dp"
-        android:text="Đăng xuất"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtWelcome" />
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="180dp"
+        android:text="Nhập địa chỉ Email mới"
+        app:layout_constraintStart_toStartOf="@+id/txtEmail"
+        app:layout_constraintTop_toBottomOf="@id/txtEmail" />
 
+    <EditText
+        android:id="@+id/edtNewEmail"
+        android:layout_width="290dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txtNewEmail"
+        app:layout_constraintTop_toBottomOf="@+id/txtNewEmail" />
+
+    <TextView
+        android:id="@+id/txtNewPassword1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Nhập mật khẩu mới"
+        app:layout_constraintStart_toStartOf="@id/edtNewEmail"
+        app:layout_constraintTop_toBottomOf="@id/edtNewEmail" />
+
+    <EditText
+        android:id="@+id/edtPassword1"
+        android:layout_width="290dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintStart_toStartOf="@+id/txtNewPassword1"
+        app:layout_constraintTop_toBottomOf="@+id/txtNewPassword1" />
+
+    <TextView
+        android:id="@+id/txtNewPassword2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Nhập lại mật khẩu mới"
+        app:layout_constraintStart_toStartOf="@+id/edtPassword1"
+        app:layout_constraintTop_toBottomOf="@+id/edtPassword1" />
+
+    <EditText
+        android:id="@+id/edtPassword2"
+        android:layout_width="290dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintStart_toStartOf="@+id/txtNewPassword2"
+        app:layout_constraintTop_toBottomOf="@+id/txtNewPassword2" />
+
+    <Button
+        android:id="@+id/btnUpdate"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Cập nhật thông tin"
+        app:layout_constraintStart_toStartOf="@+id/edtPassword2"
+        app:layout_constraintTop_toBottomOf="@+id/edtPassword2" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="92dp"
+        android:text="Nhập họ tên đầy đủ"
+        app:layout_constraintStart_toStartOf="@+id/txtEmail"
+        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+
+    <EditText
+        android:id="@+id/edtFull"
+        android:layout_width="290dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 </androidx.constraintlayout.widget.ConstraintLayout>
