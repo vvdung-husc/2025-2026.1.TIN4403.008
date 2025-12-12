@@ -1,7 +1,7 @@
 
 const Buffer = require('buffer/').Buffer;
-const DB = require("./_global/ltdd_db")
-const UTILS = require('./_global/utils.js');
+const DB = require("./_database/ltdd_db")
+const UTILS = require('./_database/utils.js');
 
 var appRouter = function (app) {
 
