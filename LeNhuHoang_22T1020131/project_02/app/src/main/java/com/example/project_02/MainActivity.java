@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                         return;
                     }
 
-                    // ✅ Lưu token và chuyển sang UserActivity
+                    //Lưu token và chuyển sang UserActivity
                     Intent intent = new Intent(getApplicationContext(), UserActivity.class);
                     intent.putExtra("token", token);
                     startActivity(intent);

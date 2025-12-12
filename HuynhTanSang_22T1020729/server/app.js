@@ -1,6 +1,6 @@
 var express = require('express');
 var routes = require("./routes.js");
-
+var DB = require("./_database/ltdd_db")
 var app = express();
 
 app.use(express.json());
@@ -8,6 +8,9 @@ app.use(express.urlencoded({extended: true}));
 
 routes(app);
 
-var server = app.listen(4380, function () {
-  console.log("app running on port.", server.address().port);
-});  
+DB.Init(function (err, result){
+    if (err) process.exit(1);
+    var server = app.listen(4380, function () {
+        console.log("app running on port.", server.address().port);
+    });
+});
