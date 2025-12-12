@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="txtFullname" type="id">txtFullname</item>
+    <item name="btnLogout" type="id">btnLogout</item>
+    <item name="txtEmail" type="id">txtEmail</item>
+    <item name="txtNewEmail" type="id">txtNewEmail</item>
+    <item name="edtNewEmail" type="id">editNewEmail</item>
+    <item name="txtNewPassword1" type="id">txtNewPassword1</item>
+    <item name="edtPassword1" type="id">edtPassword1</item>
+    <item name="txtNewPassword2" type="id">txtNewPassword2</item>
+    <item name="edtPassword2" type="id">editPassword2</item>
+    <item name="btnUpdate" type="id">btnUpdate</item>
+    <item name="textView4" type="id">textView4</item>
+    <item name="edtPass1" type="id">edtPass1</item>
+    <item name="edtName" type="id">edtName</item>
+    <item name="edtPass2" type="id">edtPass2</item>
+    <item name="edtUser" type="id">edtUser</item>
+    <item name="txtBack" type="id">txtBack</item>
+</resources>
