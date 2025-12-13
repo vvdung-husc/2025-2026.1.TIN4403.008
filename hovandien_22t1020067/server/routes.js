@@ -39,10 +39,19 @@ var appRouter = function (app) {
     // 	res.status(200).send("FAILED - LOGIN API [" + user + "/" + pass +"]");
   });
 
+  // app.post("/register", function (req, res) {
+  //   res.status(200).send("REGISTER API");
+  // });
   app.post("/register", function (req, res) {
-    res.status(200).send("REGISTER API");
+    var fullname = req.body.fullname;
+    var user = req.body.username;
+    var pass = req.body.password;
+
+    POST_register(fullname, user, pass, res);
   });
 
+  
+  
   app.post("/userupdate", function (req, res) {
     var token = req.headers.token;
     var pass = req.body.password;
@@ -190,4 +199,48 @@ function decodeToken(token) {
   oResult['message'] = user_;
 
   return oResult;
+}
+
+//register
+async function POST_register(fullname, user, pass, res) {
+
+  // kiểm tra fullname
+  if (fullname == undefined || !fullname || fullname.length < 3) {
+    UTILS.apiResult(-1, "Họ tên không hợp lệ", res);
+    return;
+  }
+
+  // kiểm tra username
+  if (user == undefined || !user || user.length < 3) {
+    UTILS.apiResult(-2, "Tài khoản không hợp lệ", res);
+    return;
+  }
+
+  // kiểm tra password
+  if (pass == undefined || !pass || pass.length < 6) {
+    UTILS.apiResult(-3, "Mật khẩu không hợp lệ", res);
+    return;
+  }
+
+  // kiểm tra trùng username
+  var u = await DB.getUser(user);
+  if (u) {
+    UTILS.apiResult(-4, "Tài khoản đã tồn tại", res);
+    return;
+  }
+
+  // tạo user mới
+  var newUser = {
+    fullname: fullname,
+    username: user,
+    password: pass
+  };
+
+  var r = await DB.insertUser(newUser);
+  if (!r) {
+    UTILS.apiResult(-5, "Đăng ký không thành công", res);
+    return;
+  }
+
+  UTILS.apiResult(1, "Đăng ký thành công", res);
 }
