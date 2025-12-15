@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import java.io.IOException;
 
 import com.example.project_01.ApiClient;
+import com.example.project_01.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         m_btnLogin = (Button) findViewById(R.id.btnLogin);
         m_btnRegister = (Button) findViewById(R.id.btnRegister);
 
-        m_edtUser.setText("yntn_k46");
-        m_edtPass.setText("020534");
+        //m_edtUser.setText("yntn_k46");
+        //m_edtPass.setText("020534");
 
         //Cài đặt sự kiện Click cho Button Login
         m_btnLogin.setOnClickListener(new CButtonLogin());
@@ -98,28 +99,41 @@ public class MainActivity extends AppCompatActivity {
 
         // chạy trên thread khác với UIThread để tránh bị treo ứng dụng
         new Thread(() -> {
-            ApiClient.ApiResult r = ApiClient.httpPost("https://dev.husc.edu.vn/tin4403/api/login", json,null);
+            ApiClient.ApiResult r = ApiClient.httpPost(ApiClient.URL_LOGIN, json,null);
 
             runOnUiThread(() -> {
-                if (r.success) {
-                    Toast.makeText(this, "OK: " + r.body, Toast.LENGTH_SHORT).show();
+                try {
+                    JSONObject obj = new JSONObject(r.body);
 
-                    try {
-                        JSONObject obj = new JSONObject(r.body);
+                    int ret = obj.getInt("r");          // r là mã lỗi trả về từ API
+                    String msg = obj.getString("m");    // m là thông báo trả về từ API
 
-                        int ret = obj.getInt("r");
-                        String msg = obj.getString("m");   // m là Base64
+                    if (r.success) {
+                        Log.w("API", "OK: " + r.httpCode + " " + r.body);
+                        Toast.makeText(this, "OK: " + r.httpCode + " " + r.body, Toast.LENGTH_SHORT).show();
 
-                        _token = msg;
 
+                        _token = msg; // là một chuỗi Base64
                         Intent i = new Intent(getApplicationContext(), UserActivity.class);
                         startActivity(i);
-                    } catch (JSONException e) {
-                        Toast.makeText(this, "Lỗi ParseJSON ", Toast.LENGTH_SHORT).show();
                     }
+                    else {
+                        Log.e("API", "ERR: " + r.httpCode + " " + r.body);
+                        Toast.makeText(this, "ERR: " + r.body, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Log.e("API", "FAILED: " + r.httpCode + " " + r.body);
+
+                    //Một số thông báo lỗi khi không kết nối được với dịch vụ API
+                    if (r.httpCode == 404)
+                        Utils.showAlert(MainActivity.this,"Lỗi dịch vụ","API không tìm thấy - " + ApiClient.URL_LOGIN);
+                    else if (r.httpCode == 502)  // Bad Gateway - Dịch vụ không chạy
+                        Utils.showAlert(MainActivity.this,"Lỗi dịch vụ","Dịch vụ API đang không hoạt động");
+                    else if (r.body.contains("Failed to connect"))
+                        Utils.showAlert(MainActivity.this,"Lỗi dịch vụ",r.body);
+                    else Toast.makeText(this, "Lỗi ParseJSON " + r.body, Toast.LENGTH_SHORT).show();
                 }
-                else
-                    Toast.makeText(this, "ERR: " + r.body, Toast.LENGTH_SHORT).show();
+
             });
         }).start();
 
