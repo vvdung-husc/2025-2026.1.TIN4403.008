@@ -2,9 +2,9 @@ const { MongoClient } = require('mongodb');
 const fs = require('fs');
 const csv = require('csv-parser');
 
-// MongoDB Connection URI
-const uri = "mongodb://localhost:27017"; // Thay đổi nếu MongoDB của bạn chạy trên cổng hoặc host khác
-const dbName = "student_management"; // Tên database của bạn
+// MongoDB Connection URI (ưu tiên biến môi trường)
+const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+const dbName = process.env.DB_NAME || 'student_management';
 const collectionName = "students"; // Tên collection để lưu trữ dữ liệu sinh viên
 
 async function importData() {
@@ -34,7 +34,7 @@ async function importData() {
                     });
                 }
             })
-            .on('end', async () => {
+            .on('end', async() => {
                 if (students.length > 0) {
                     const result = await collection.insertMany(students);
                     console.log(`${result.insertedCount} documents were inserted`);
