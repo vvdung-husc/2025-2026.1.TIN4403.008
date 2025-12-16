@@ -1,4 +1,51 @@
 package com.example.project_1;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
-public class RegisterActivity {
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class RegisterActivity extends AppCompatActivity {
+    TextView m_txtBack;
+    Button m_btnRegister;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_register);
+
+        //Khởi tạo các biến điều khiển tương ứng trong layout
+        m_txtBack = (TextView)findViewById(R.id.txtBack);
+        m_btnRegister = (Button) findViewById(R.id.btnRegister);
+
+        m_txtBack.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // Finish the registration screen and return to the Login activity
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        m_btnRegister.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Utils.showAlert(RegisterActivity.this,"Thông báo", "Yêu cầu viết mã để thực hiện công việc này");
+            }
+        });
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
 }
