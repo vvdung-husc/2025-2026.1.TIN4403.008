@@ -17,7 +17,7 @@ CDBLTDD.prototype.Init = async function () {
         console.log("Connected to MongoDB!");
         //console.log(this.client_);
 
-        this.db_ = this.client_.db("ltdd"); // Replace "mydatabase" with your database name
+        this.db_ = this.client_.db("sinhvien"); // Replace "mydatabase" with your database name
         //console.log(this.db_);
         console.log('...MONGO Actived : [' + this.db_.databaseName + ']');
 
@@ -32,23 +32,23 @@ CDBLTDD.prototype.Init = async function () {
 }
 
 CDBLTDD.prototype.getUser = async function(user){
-  const u = await this.db_.collection("users").findOne({username:user});
+  const u = await this.db_.collection("svdb").findOne({username:user});
   return u;   // trả về user hoặc null
 }
 
 CDBLTDD.prototype.getUsers = async function(){//không trả về _id
-  const users = await this.db_.collection("users").find({}, { projection: { _id: 0 } }).toArray();
+  const users = await this.db_.collection("svdb").find({}, { projection: { _id: 0 } }).toArray();
   return users;   // trả về mảng users
 }
 
 CDBLTDD.prototype.Authentication = async function(user, pass){
-  const u = await this.db_.collection("users").findOne({ username: user, password: pass});
+  const u = await this.db_.collection("svdb").findOne({ username: user, password: pass});
   return u;   // trả về user hoặc null
 }
 
 CDBLTDD.prototype.modifyUser = async function (user, modify){
     //console.log(modify);
-    const oDoc = await this.db_.collection("users").updateOne({username:user},{$set:modify});
+    const oDoc = await this.db_.collection("svdb").updateOne({username:user},{$set:modify});
     //console.log(oDoc);
     return oDoc;
 } 
