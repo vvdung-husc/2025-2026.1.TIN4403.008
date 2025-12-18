@@ -1,4 +1,4 @@
-const Buffer = require('buffer/').Buffer;
+const {Buffer} = require('buffer');
 const DB = require("./_database/ltdd_db")
 const UTILS = require('./_database/utils.js');
 
