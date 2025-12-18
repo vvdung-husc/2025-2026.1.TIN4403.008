@@ -31,6 +31,26 @@ public class MainActivity extends AppCompatActivity {
     Button m_btnLogin, m_btnRegister; //Biến điều khiển Button
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        applyPrefillFromIntent(intent);
+    }
+
+    private void applyPrefillFromIntent(Intent intent) {
+        if (intent == null) return;
+
+        if (intent.hasExtra("prefill_user")) {
+            String u = intent.getStringExtra("prefill_user");
+            if (u != null) m_edtUser.setText(u);
+        }
+
+        if (intent.hasExtra("prefill_pass")) {
+            String p = intent.getStringExtra("prefill_pass");
+            if (p != null) m_edtPass.setText(p);
+        }
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -41,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         m_edtPass = (EditText) findViewById(R.id.edtPassword);
         m_btnLogin = (Button) findViewById(R.id.btnLogin);
         m_btnRegister = (Button) findViewById(R.id.btnRegister);
+        applyPrefillFromIntent(getIntent());
 
         //m_edtUser.setText("yntn_k46");
         //m_edtPass.setText("020534");
