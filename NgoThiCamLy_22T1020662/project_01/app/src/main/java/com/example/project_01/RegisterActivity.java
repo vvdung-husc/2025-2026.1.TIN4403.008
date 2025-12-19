@@ -23,7 +23,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //Khởi tạo các biến điều khiển tương ứng trong layout
         m_txtBack = (TextView)findViewById(R.id.txtBack);
-        m_btnRegister = (Button) findViewById(R.id.Register);
+        m_btnRegister = (Button) findViewById(R.id.btnRegister);
 
         m_txtBack.setOnClickListener(new View.OnClickListener(){
             @Override
