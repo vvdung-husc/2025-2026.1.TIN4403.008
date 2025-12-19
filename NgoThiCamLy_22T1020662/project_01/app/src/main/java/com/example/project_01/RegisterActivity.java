@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,33 +13,40 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class RegisterActivity extends AppCompatActivity {
-
+    TextView m_txtBack;
+    Button m_btnRegister;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
 
-        // Xử lý hiển thị an toàn
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
+        //Khởi tạo các biến điều khiển tương ứng trong layout
+        m_txtBack = (TextView)findViewById(R.id.txtBack);
+        m_btnRegister = (Button) findViewById(R.id.Register);
+
+        m_txtBack.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // Finish the registration screen and return to the Login activity
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        m_btnRegister.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Utils.showAlert(RegisterActivity.this,"Thông báo", "Yêu cầu viết mã để thực hiện công việc này");
+            }
+        });
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-        });
-
-        // Nút "Tạo mới tài khoản"
-        Button btnTaoMoiTK = findViewById(R.id.id_TaoMoiTK);
-        btnTaoMoiTK.setOnClickListener(v -> {
-            Toast.makeText(RegisterActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-        });
-
-        // 👉 TextView "Đã có tài khoản? Đăng nhập"
-        TextView txtDaCoTK = findViewById(R.id.id_DaCoTK);
-        txtDaCoTK.setOnClickListener(v -> {
-            // Chuyển về MainActivity
-            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish(); // Đóng RegisterActivity để không quay lại khi nhấn nút Back
         });
     }
 }

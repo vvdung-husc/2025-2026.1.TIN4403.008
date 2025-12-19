@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-
     private void loginUser(String username, String password) {
         new Thread(() -> {
             try {
@@ -69,29 +68,79 @@ public class MainActivity extends AppCompatActivity {
                         .build();
 
                 Request request = new Request.Builder()
-                        .url("http://192.168.1.139:5000/login")//https://dev.husc.edu.vn/tin4403/api/login
+                        .url("http://192.168.137.38:4380/login")
                         .post(body)
                         .build();
 
                 try (Response response = client.newCall(request).execute()) {
-                    String responseData = response.body().string();
-                    JSONObject jsonResponse = new JSONObject(responseData);
 
-                    int r = jsonResponse.optInt("r", 0);
-                    String token = jsonResponse.optString("token", "");
+                    String responseData = response.body().string();
+                    JSONObject json = new JSONObject(responseData);
+
+                    int r = json.optInt("r", 0);
+                    String token = json.optString("token", "");
 
                     runOnUiThread(() -> {
                         if (r == 1 && !token.isEmpty()) {
                             Toast.makeText(MainActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(MainActivity.this, HomeActivity2.class);
-                            intent.putExtra("token", token);
+                            intent.putExtra("token", token);        // ← GỬI TOKEN ĐI
                             startActivity(intent);
 
                         } else {
                             Toast.makeText(MainActivity.this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show();
                         }
                     });
+//    private void loginUser(String username, String password) {
+//        new Thread(() -> {
+//            try {
+//                RequestBody body = new okhttp3.FormBody.Builder()
+//                        .add("username", username)
+//                        .add("password", password)
+//                        .build();
+//
+//                Request request = new Request.Builder()
+//                        .url("http://192.168.88.124:4380/login")//https://dev.husc.edu.vn/tin4403/api/login
+//                        .post(body)
+//                        .build();
+//
+//                try (Response response = client.newCall(request).execute()) {
+//                    String responseData = response.body().string();
+//
+//                    JSONObject jsonResponse = new JSONObject(responseData);
+//
+//                    int r = jsonResponse.optInt("r", 0);
+//                    String token = jsonResponse.optString("token", "");
+//
+//                    boolean finalOk = (r == 1 && !token.isEmpty());
+//
+//                    runOnUiThread(() -> {
+//                        if (finalOk) {
+//                            Toast.makeText(MainActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+//                            startActivity(new Intent(MainActivity.this, HomeActivity2.class));
+//                        } else {
+//                            Toast.makeText(MainActivity.this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+
+//                    JSONObject jsonResponse = new JSONObject(responseData);
+//
+//                    int r = jsonResponse.optInt("r", 0);
+//                    String token = jsonResponse.optString("token", "");
+//
+//                    runOnUiThread(() -> {
+//                        if (r == 1 && !token.isEmpty()) {
+//                            Toast.makeText(MainActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+//
+//                            Intent intent = new Intent(MainActivity.this, HomeActivity2.class);
+//                            intent.putExtra("token", token);
+//                            startActivity(intent);
+//
+//                        } else {
+//                            Toast.makeText(MainActivity.this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
                 }
             } catch (Exception e) {
                 e.printStackTrace();

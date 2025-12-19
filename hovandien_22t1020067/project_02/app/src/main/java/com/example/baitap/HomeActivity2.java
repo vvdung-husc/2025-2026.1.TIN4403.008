@@ -58,7 +58,8 @@ public class HomeActivity2 extends AppCompatActivity {
                         .build();
 
                 Request request = new Request.Builder()
-                        .url("http://192.168.1.139:5000/userinfo") // hoặc IP thật của PC
+                        .url("http://192.168.137.38:4380/userinfo") // hoặc IP thật của PC
+                        .addHeader("authorization", token)
                         .post(body)
                         .build();
 

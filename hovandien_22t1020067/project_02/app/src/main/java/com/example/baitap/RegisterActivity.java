@@ -68,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
                         .add("email", email)
                         .build();
 
-                String apiUrl = "http://192.168.1.139:5000/register";
+                String apiUrl = "http://192.168.137.38:4380/register";
 
                 Request request = new Request.Builder()
                         .url(apiUrl)

@@ -27,12 +27,21 @@ import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    // ==========================
+    // API MÁY CÁ NHÂN
+    // ==========================
+    private static final String URL_REGISTER =
+            "http://192.168.1.11:4380/register";
 
-    // Các thành phần giao diện
+    public static final MediaType JSON =
+            MediaType.parse("application/json; charset=utf-8");
+
+    // Giao diện
     EditText edtFullName, edtEmail, edtUsername, edtPassword, edtRePassword;
     Button btnRegister;
     TextView tvBackToLogin;
+
+    OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,122 +49,153 @@ public class RegisterActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
 
-        // Liên kết với XML
-        edtFullName = findViewById(R.id.edtFullName);
-        edtEmail = findViewById(R.id.edtEmail);
-        edtUsername = findViewById(R.id.edtUsername);
-        edtPassword = findViewById(R.id.edtPassword);
-        edtRePassword = findViewById(R.id.edtRePassword);
-        btnRegister = findViewById(R.id.btnRegister);
-        tvBackToLogin = findViewById(R.id.tvBackToLogin);
+        // Ánh xạ View
+        edtFullName     = findViewById(R.id.edtFullName);
+        edtEmail        = findViewById(R.id.edtEmail);
+        edtUsername     = findViewById(R.id.edtUsername);
+        edtPassword     = findViewById(R.id.edtPassword);
+        edtRePassword   = findViewById(R.id.edtRePassword);
+        btnRegister     = findViewById(R.id.btnRegister);
+        tvBackToLogin   = findViewById(R.id.tvBackToLogin);
 
-        // Quay lại đăng nhập
+        // Quay về Login
         tvBackToLogin.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
             finish();
         });
 
-        // Nút đăng ký
+        // Đăng ký
         btnRegister.setOnClickListener(v -> {
-            String fullName = edtFullName.getText().toString().trim();
-            String email = edtEmail.getText().toString().trim();
-            String username = edtUsername.getText().toString().trim();
-            String pass1 = edtPassword.getText().toString();
-            String pass2 = edtRePassword.getText().toString();
 
-            // 🧩 Kiểm tra dữ liệu nhập
-            if (fullName.isEmpty() || username.isEmpty() || pass1.isEmpty() || pass2.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin bắt buộc!", Toast.LENGTH_SHORT).show();
+            String fullName = edtFullName.getText().toString().trim();
+            String email    = edtEmail.getText().toString().trim();
+            String username = edtUsername.getText().toString().trim();
+            String pass1    = edtPassword.getText().toString();
+            String pass2    = edtRePassword.getText().toString();
+
+            // ===== Validate =====
+            if (fullName.isEmpty() || username.isEmpty()
+                    || pass1.isEmpty() || pass2.isEmpty()) {
+                Toast.makeText(this,
+                        "Vui lòng nhập đầy đủ thông tin!",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (username.length() < 3) {
-                Toast.makeText(this, "Tên đăng nhập phải có ít nhất 3 ký tự!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,
+                        "Tên đăng nhập ít nhất 3 ký tự!",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (pass1.length() < 6) {
-                Toast.makeText(this, "Mật khẩu phải có ít nhất 6 ký tự!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,
+                        "Mật khẩu ít nhất 6 ký tự!",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (!pass1.equals(pass2)) {
-                Toast.makeText(this, "Mật khẩu nhập lại không trùng khớp!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,
+                        "Mật khẩu nhập lại không khớp!",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (!email.isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                Toast.makeText(this, "Email không hợp lệ!", Toast.LENGTH_SHORT).show();
+            if (!email.isEmpty()
+                    && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(this,
+                        "Email không hợp lệ!",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // 🧩 Gọi API đăng ký
-            try {
-                apiRegister(username, fullName, email, pass1);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            apiRegister(username, fullName, email, pass1);
         });
 
-        // Căn chỉnh giao diện cho vừa màn hình
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registerLayout), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        // Căn lề màn hình
+        ViewCompat.setOnApplyWindowInsetsListener(
+                findViewById(R.id.registerLayout),
+                (v, insets) -> {
+                    Insets systemBars =
+                            insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                    v.setPadding(systemBars.left, systemBars.top,
+                            systemBars.right, systemBars.bottom);
+                    return insets;
+                });
     }
 
-    // 🧩 Hàm gọi API đăng ký người dùng
-    void apiRegister(String username, String fullname, String email, String password) throws IOException {
-        OkHttpClient client = new OkHttpClient();
+    // ==========================
+    // API REGISTER
+    // ==========================
+    void apiRegister(String username,
+                     String fullname,
+                     String email,
+                     String password) {
 
-        // Chuẩn bị dữ liệu JSON
-        String json = "{\"username\":\"" + username + "\"," +
-                "\"fullname\":\"" + fullname + "\"," +
-                "\"email\":\"" + email + "\"," +
-                "\"password\":\"" + password + "\"}";
+        String json = "{"
+                + "\"username\":\"" + username + "\","
+                + "\"fullname\":\"" + fullname + "\","
+                + "\"email\":\"" + email + "\","
+                + "\"password\":\"" + password + "\""
+                + "}";
 
         Log.d("REGISTER_JSON", json);
 
         RequestBody body = RequestBody.create(json, JSON);
+
         Request request = new Request.Builder()
-                .url("https://dev.husc.edu.vn/tin4403/api/register")
+                .url(URL_REGISTER) // ✅ API máy bạn
                 .post(body)
                 .build();
 
-        // Gửi request
         client.newCall(request).enqueue(new Callback() {
+
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(() ->
-                        Toast.makeText(getApplicationContext(),
-                                "Không thể kết nối máy chủ: " + e.getMessage(),
-                                Toast.LENGTH_SHORT).show());
+                        Toast.makeText(RegisterActivity.this,
+                                "Không kết nối được server!",
+                                Toast.LENGTH_LONG).show()
+                );
+                call.cancel();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseBody = response.body().string();
-                Log.d("REGISTER_RESPONSE", responseBody);
+
+                String resStr = response.body() != null
+                        ? response.body().string()
+                        : "";
+
+                Log.d("REGISTER_RESPONSE", resStr);
 
                 runOnUiThread(() -> {
+
                     if (response.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(),
+                        Toast.makeText(RegisterActivity.this,
                                 "Đăng ký thành công! Vui lòng đăng nhập.",
                                 Toast.LENGTH_SHORT).show();
 
-                        // Quay lại trang đăng nhập
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.putExtra("username", username); // Gửi sẵn tên đăng nhập
-                        startActivity(intent);
+                        Intent i =
+                                new Intent(RegisterActivity.this,
+                                        MainActivity.class);
+                        i.putExtra("username", username);
+                        startActivity(i);
                         finish();
-                    } else {
-                        String msg = "Đăng ký thất bại!";
-                        if (responseBody.contains("exists")) {
-                            msg = "Tên tài khoản hoặc email đã tồn tại!";
-                        }
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                        return;
                     }
+
+                    // Đăng ký thất bại
+                    String msg = "Đăng ký thất bại!";
+                    if (resStr.contains("exists")) {
+                        msg = "Tài khoản hoặc email đã tồn tại!";
+                    }
+
+                    Toast.makeText(RegisterActivity.this,
+                            msg,
+                            Toast.LENGTH_LONG).show();
                 });
             }
         });
