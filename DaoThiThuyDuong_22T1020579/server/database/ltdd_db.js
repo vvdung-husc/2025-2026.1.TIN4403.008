@@ -39,5 +39,5 @@ CDBLTDD.prototype.getUsers = async function(){
 
 CDBLTDD.prototype.getByUsername = async function(user, pass){
   const u = await this.db_.collection("user").findOne({ username: user, password: pass});
-  return u;   // trả về user hoặc null
+  return u;   // trả về user or null
 }
