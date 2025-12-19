@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_1">
         <activity
+            android:name=".Utils"
+            android:exported="false" />
+        <activity
+            android:name=".ApiClient"
+            android:exported="false" />
+        <activity
             android:name=".UserActivity"
             android:exported="true">
             <intent-filter>

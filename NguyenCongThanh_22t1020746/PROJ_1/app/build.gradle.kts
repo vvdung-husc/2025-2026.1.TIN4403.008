@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.proj_1"
+    namespace = "com.example.project_01"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.proj_1"
+        applicationId = "com.example.project_01"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -40,4 +40,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
