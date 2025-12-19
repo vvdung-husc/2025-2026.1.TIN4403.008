@@ -1,5 +1,6 @@
-package com.example.project_01;
+package com.example.project1;
 import android.util.Log;
+import android.view.PixelCopy;
 
 import okhttp3.*;
 import java.io.IOException;
@@ -10,7 +11,7 @@ public class ApiClient {
     /**
      * xem tất cả các tài khoản đang có trong hệ thống từ trình duyệt
      * https://dev.husc.edu.vn/tin4403/api/users
-    **/
+     **/
 
     //CHỈ SỬ DỤNG 1 TRONG 2
     //ĐÂY LÀ ĐỊNH NGHĨA URL CÁC API CHO APP QUAN INTERNET BẰNG DOMAIN dev.husc.edu.vn
@@ -45,7 +46,7 @@ public class ApiClient {
     // GET
     // ==========================
     public static ApiResult httpGet(String url, Map<String, String> headers) {
-        Request.Builder builder = new Request.Builder().url(url);
+        PixelCopy.Request.Builder builder = new Request.Builder().url(url);
 
         if (headers != null) {
             for (Map.Entry<String, String> h : headers.entrySet()) {
