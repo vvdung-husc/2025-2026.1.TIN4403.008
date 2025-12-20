@@ -39,9 +39,46 @@ var appRouter = function (app) {
     // 	res.status(200).send("FAILED - LOGIN API [" + user + "/" + pass +"]");
   });
 
-  app.post("/register", function (req, res) {
-    res.status(200).send("REGISTER API");
-  });
+  app.post("/register", async function (req, res) {
+  var username = req.body.username;
+  var password = req.body.password;
+  var fullname = req.body.fullname;
+  var email = req.body.email;
+
+  // Validate
+  if (!username || username.length < 3) {
+    UTILS.apiResult(-1, "Tên tài khoản không hợp lệ", res);
+    return;
+  }
+
+  if (!password || password.length < 6) {
+    UTILS.apiResult(-2, "Mật khẩu phải >= 6 ký tự", res);
+    return;
+  }
+
+  if (!email || email.indexOf("@") === -1) {
+    UTILS.apiResult(-3, "Email không hợp lệ", res);
+    return;
+  }
+
+  // Check trùng user
+  if (await DB.getUser(username)) {
+    UTILS.apiResult(-4, "Tài khoản đã tồn tại", res);
+    return;
+  }
+
+  var user = {
+    username: username,
+    password: password,
+    fullname: fullname ? fullname : "",
+    email: email
+  };
+
+  await DB.createUser(user);
+
+  UTILS.apiResult(1, "Đăng ký tài khoản thành công", res);
+});
+
 
   app.post("/userupdate", function (req, res) {
     var token = req.headers.token;

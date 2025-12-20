@@ -19,8 +19,8 @@ import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText m_edtUser, m_edtPass, m_edtFullname, m_edtEmail;
-    Button m_btnRegister, m_txtBack;
+    EditText m_edtUser, m_edtPass, m_edtFullname;
+    Button m_btnRegister, m_btnBackToLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,20 +28,22 @@ public class RegisterActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
 
+        // ánh xạ UI
         m_edtUser = findViewById(R.id.edtUser);
         m_edtPass = findViewById(R.id.edtPass1);
         m_edtFullname = findViewById(R.id.edtName);
-//        m_edtEmail = findViewById(R.id.edtNewEmail);
 
         m_btnRegister = findViewById(R.id.btnRegister);
-//        m_txtBack = findViewById(R.id.btnBack);
+        m_btnBackToLogin = findViewById(R.id.btnBackToLogin);
 
-//        m_txtBack.setOnClickListener(v -> {
-//            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//            finish();
-//        });
-
+        // sự kiện nút đăng ký
         m_btnRegister.setOnClickListener(v -> registerUser());
+
+        // sự kiện nút quay lại đăng nhập
+        m_btnBackToLogin.setOnClickListener(v -> {
+            startActivity(new Intent(this, MainActivity.class));
+            finish(); // optional, to close register activity
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -51,32 +53,32 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     void registerUser() {
-        String user = m_edtUser.getText().toString();
-        String pass = m_edtPass.getText().toString();
-        String fullname = m_edtFullname.getText().toString();
-        String email = m_edtEmail.getText().toString();
+        String user = m_edtUser.getText().toString().trim();
+        String pass = m_edtPass.getText().toString().trim();
+        String fullname = m_edtFullname.getText().toString().trim();
 
+        // validations
         if (user.length() < 3) {
-            Toast.makeText(this, "Username phải >= 3 ký tự", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, "Username phải >= 3 ký tự", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (pass.length() < 6) {
-            Toast.makeText(this, "Password phải >= 6 ký tự", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, "Password phải >= 6 ký tự", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (!email.contains("@")) {
-            Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+        if (fullname.isEmpty()) {
+            Toast.makeText(RegisterActivity.this, "Họ tên không được bỏ trống", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // tạo JSON gửi API
         JSONObject obj = new JSONObject();
         try {
             obj.put("username", user);
             obj.put("password", pass);
             obj.put("fullname", fullname);
-            obj.put("email", email);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -84,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
         String json = obj.toString();
         Log.d("API", "REGISTER JSON: " + json);
 
-        // chạy trên thread khác
+        // chạy API bằng thread khác
         new Thread(() -> {
             ApiClient.ApiResult r = ApiClient.httpPost(ApiClient.URL_USER_REGISTER, json, null);
 
@@ -100,17 +102,17 @@ public class RegisterActivity extends AppCompatActivity {
                                 "Thành công",
                                 "Đăng ký thành công, hãy đăng nhập!");
 
+                        // clear form
                         m_edtUser.setText("");
                         m_edtPass.setText("");
                         m_edtFullname.setText("");
-                        m_edtEmail.setText("");
 
                     } else {
-                        Toast.makeText(this, "Lỗi: " + msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "Lỗi: " + msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
-                    Toast.makeText(this, "Lỗi kết nối API", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Lỗi kết nối API", Toast.LENGTH_SHORT).show();
                 }
             });
 
