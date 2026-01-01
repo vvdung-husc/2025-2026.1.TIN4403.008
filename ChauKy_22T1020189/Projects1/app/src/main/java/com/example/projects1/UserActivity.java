@@ -111,42 +111,41 @@ public class UserActivity extends AppCompatActivity {
         });
     }
 
-    void getUserInfo(){
-        // chạy trên thread khác với UIThread để tránh bị treo ứng dụng
+    void getUserInfo() {
         new Thread(() -> {
             Map<String, String> headers = new HashMap<>();
             headers.put("token", MainActivity._token);
 
-            ApiClient.ApiResult r = ApiClient.httpPost(ApiClient.URL_USER_INFO,null, headers);
+            // Gọi API lấy thông tin user
+            ApiClient.ApiResult r = ApiClient.httpPost(ApiClient.URL_USER_INFO, null, headers);
 
             runOnUiThread(() -> {
                 if (r.success) {
-                    Log.w("API", "OK: " + r.httpCode + " " + r.body);
-
                     try {
-
                         JSONObject obj = new JSONObject(r.body);
+                        // Server trả về { "r": 1, "m": { ... thông tin user ... } }
+                        if (obj.getInt("r") == 1) {
+                            JSONObject m = obj.getJSONObject("m");
 
-                        int ret = obj.getInt("r");
-                        JSONObject m = obj.getJSONObject("m");
+                            // Lấy "username" làm dự phòng nếu "fullname" bị trống
+                            String fullname = m.optString("fullname", "");
+                            if (fullname.isEmpty() || fullname.equals("null")) {
+                                fullname = m.optString("username", "Thành viên");
+                            }
 
-                        //String username = m.getString("username");
-                        //String password = m.getString("password");
-                        String fullname = m.has("fullname") ? m.getString("fullname") : "<Chưa có fullname>";
-                        String szEmail = m.has("email") ? m.getString("email") : "<Chưa có email>";
+                            String szEmail = m.optString("email", "Chưa có email");
 
-                        m_txtFullname.setText("Chào mừng tài khoản : " + fullname);
-                        m_txtEmail.setText( "Địa chỉ thư diện tử : " + szEmail);
-
+                            // Hiển thị lên giao diện
+                            m_txtFullname.setText("Chào mừng tài khoản : " + fullname);
+                            m_txtEmail.setText("Địa chỉ thư điện tử : " + szEmail);
+                        }
                     } catch (JSONException e) {
-                        Toast.makeText(this, "Lỗi ParseJSON ", Toast.LENGTH_SHORT).show();
+                        Log.e("API", "Lỗi Parse JSON: " + e.getMessage());
                     }
                 } else {
-                    Log.e("API", "ERR: " + r.httpCode + " " + r.body);
-                    Toast.makeText(this, "ERR: " + r.body, Toast.LENGTH_SHORT).show();
+                    Log.e("API", "Lỗi kết nối: " + r.body);
                 }
             });
-
         }).start();
     }
 
