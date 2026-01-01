@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class UserActivity extends AppCompatActivity {
     TextView m_txtFullname, m_txtEmail;
-    EditText m_edtNewEmail, m_edtPassword1, m_edtPassword2; //Biến điều khiển EditText**
+    EditText m_edtNewEmail, m_edtNewFullname, m_edtPassword1, m_edtPassword2; //Biến điều khiển EditText**
     Button m_btnLogout, m_btnUpdate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class UserActivity extends AppCompatActivity {
         m_edtPassword1 = (EditText) findViewById(R.id.edtPassword1);
         m_edtPassword2 = (EditText) findViewById(R.id.edtPassword2);
         m_btnUpdate = (Button) findViewById(R.id.btnUpdate);
-
+        m_edtNewFullname = (EditText) findViewById(R.id.edtNewFullname);
         //cập nhật thông tin tài khoản đã đăng nhập
         getUserInfo();
 
@@ -62,45 +62,47 @@ public class UserActivity extends AppCompatActivity {
                 String email = m_edtNewEmail.getText().toString();// lấy thông tin EMAIL đã nhập
                 String pass = m_edtPassword1.getText().toString();// lấy thông tin mật khẩu đã nhập
                 String pass2 = m_edtPassword2.getText().toString();// lấy thông tin mật khẩu đã nhập
-
-                if (email.isEmpty() && pass.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Email hoặc Password phải có để cập nhật", Toast.LENGTH_SHORT).show();
+                String fullname = m_edtNewFullname.getText().toString().trim();
+                if (email.isEmpty() && pass.isEmpty() && fullname.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Nhập ít nhất một thông tin để cập nhật", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 JSONObject obj = new JSONObject();
-
-                if (!email.isEmpty()){
-                    if (email.indexOf('@') == -1) {
-                        Toast.makeText(getApplicationContext(), "Địa chỉ email không hợp lệ", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    try {
-                        obj.put("email",email);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                try {
+                    // Cập nhật Họ và tên
+                    if (!fullname.isEmpty()) {
+                        obj.put("fullname", fullname);
                     }
 
-                }
-
-                if (!pass.isEmpty()){
-                    if ( pass.length() < 6 ||   pass2.isEmpty() || !pass.equals(pass2)) {
-                        Toast.makeText(getApplicationContext(), "Mật khẩu thay đổi không hợp lệ", Toast.LENGTH_SHORT).show();
-                        return;
+                    // Kiểm tra và thêm Email
+                    if (!email.isEmpty()) {
+                        if (email.indexOf('@') == -1) {
+                            Toast.makeText(getApplicationContext(), "Địa chỉ email không hợp lệ", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        obj.put("email", email);
                     }
-                    try {
+
+                    // Kiểm tra và thêm Password
+                    if (!pass.isEmpty()) {
+                        if (pass.length() < 6 || pass2.isEmpty() || !pass.equals(pass2)) {
+                            Toast.makeText(getApplicationContext(), "Mật khẩu thay đổi không hợp lệ", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         obj.put("password", pass);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
                     }
 
+                    // 4. Chuyển JSON thành chuỗi và gửi lên Server
+                    String json = obj.toString();
+                    Log.d("K46", "CLICK BUTTON UPDATE " + json);
+                    updateUserInfo(json);
+
+                } catch (JSONException e) {
+                    // Xử lý lỗi nếu việc tạo JSON thất bại
+                    Log.e("JSON_ERROR", "Lỗi tạo dữ liệu JSON: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Có lỗi xảy ra khi đóng gói dữ liệu", Toast.LENGTH_SHORT).show();
                 }
-
-                String json = obj.toString();
-
-                Log.d("K46", "CLICK BUTTON UPDATE " + json);
-
-                updateUserInfo(json);
             }
         });
 
@@ -127,30 +129,45 @@ public class UserActivity extends AppCompatActivity {
                         if (obj.getInt("r") == 1) {
                             JSONObject m = obj.getJSONObject("m");
 
-                            String name = "";
+                            // 1. Lấy Fullname (Ưu tiên số 1)
+                            String fullname = m.optString("fullname", "").trim();
 
-                            // 1. Thử lấy fullname
-                            if (m.has("fullname") && !m.isNull("fullname")) name = m.getString("fullname");
+                            // 2. Lấy Username/U làm dự phòng (Ưu tiên số 2)
+                            String username = m.optString("username", "");
+                            if (username.isEmpty()) username = m.optString("u", "Thành viên");
 
-                            // 2. Nếu không có fullname, thử lấy username
-                            if (name.isEmpty() || name.equals("null")) {
-                                if (m.has("username") && !m.isNull("username")) name = m.getString("username");
+                            // 3. Logic chọn tên hiển thị
+                            String finalName;
+                            if (fullname.isEmpty() || fullname.equalsIgnoreCase("null")) {
+                                finalName = username; // Hiện username nếu chưa có fullname
+                            } else {
+                                finalName = fullname; // Hiện fullname nếu đã đk thành công
                             }
 
-                            // 3. Nếu vẫn không có, thử lấy phím "u" (vì trong token bạn đặt là "u")
-                            if (name.isEmpty() || name.equals("null")) {
-                                if (m.has("u") && !m.isNull("u")) name = m.getString("u");
+                            // 4. Logic hiển thị Email
+                            String szEmail = m.optString("email", "").trim();
+                            if (szEmail.isEmpty() || szEmail.equalsIgnoreCase("null")) {
+                                szEmail = "Chưa cập nhật địa chỉ email";
                             }
 
-                            // 4. Cuối cùng nếu vẫn trống thì mới để "Thành viên"
-                            if (name.isEmpty()) name = "Thành viên";
-
-                            String szEmail = m.optString("email", "Chưa có email");
-
-                            // Hiển thị lên giao diện
-                            String finalName = name; // Biến final để dùng trong runOnUiThread nếu cần
+                            // 5. Đổ dữ liệu lên giao diện
                             m_txtFullname.setText("Chào mừng tài khoản : " + finalName);
                             m_txtEmail.setText("Địa chỉ thư điện tử : " + szEmail);
+
+                            // Hiển thị lên giao diện
+                            m_txtFullname.setText("Chào mừng tài khoản : " + finalName);
+                            m_txtEmail.setText("Địa chỉ thư điện tử : " + szEmail);
+                        } else {
+                            // TRƯỜNG HỢP NÀY LÀ KHI BẠN ĐÃ XÓA USER TRÊN DB
+                            Toast.makeText(this, "Tài khoản không tồn tại!", Toast.LENGTH_LONG).show();
+
+                            // Xóa token cũ để không bị văng nữa
+                            MainActivity._token = "";
+
+                            // Quay lại màn hình đăng nhập
+                            startActivity(new Intent(this, MainActivity.class));
+                            finish();
+
                         }
                     } catch (JSONException e) {
                         Log.e("API", "Lỗi Parse JSON: " + e.getMessage());

@@ -77,7 +77,8 @@ public class RegisterActivity extends AppCompatActivity {
         try {
             obj.put("username", user);
             obj.put("password", pass1);
-            obj.put("email", name); // Truyền thông tin email/tên vào đây
+            obj.put("fullname", null);
+            obj.put("email", "null"); // Truyền thông tin email/tên vào đây
         } catch (JSONException e) {
             e.printStackTrace();
         }

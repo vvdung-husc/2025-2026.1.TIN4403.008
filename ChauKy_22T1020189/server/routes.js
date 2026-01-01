@@ -43,11 +43,12 @@ app.post("/register", async function (req, res) {
     var user = req.body.username;
     var pass = req.body.password;
     var email = req.body.email;
+    var fullname = req.body.fullname;
 
     console.log("Nhận yêu cầu đăng ký:", user);
 
     // Chạy hàm xử lý logic
-    await POST_register(user, pass, email, res);
+    await POST_register(user, pass, email, fullname, res);
 });
   async function POST_register(user, pass, email, res) {
     // 1. Kiểm tra dữ liệu đầu vào (Validation)
@@ -65,7 +66,7 @@ app.post("/register", async function (req, res) {
     }
 
     // 3. Gọi DB để lưu (Hàm DB.Register phải có trong ltdd_db.js)
-    const result = await DB.Register(user, pass, email); 
+    const result = await DB.Register(user, pass, email, fullname); 
 
     if (result) {
         // Trả về mã 1 (Success) để RegisterActivity.java nhảy vào thông báo thành công
