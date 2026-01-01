@@ -127,16 +127,29 @@ public class UserActivity extends AppCompatActivity {
                         if (obj.getInt("r") == 1) {
                             JSONObject m = obj.getJSONObject("m");
 
-                            // Lấy "username" làm dự phòng nếu "fullname" bị trống
-                            String fullname = m.optString("fullname", "");
-                            if (fullname.isEmpty() || fullname.equals("null")) {
-                                fullname = m.optString("username", "Thành viên");
+                            String name = "";
+
+                            // 1. Thử lấy fullname
+                            if (m.has("fullname") && !m.isNull("fullname")) name = m.getString("fullname");
+
+                            // 2. Nếu không có fullname, thử lấy username
+                            if (name.isEmpty() || name.equals("null")) {
+                                if (m.has("username") && !m.isNull("username")) name = m.getString("username");
                             }
+
+                            // 3. Nếu vẫn không có, thử lấy phím "u" (vì trong token bạn đặt là "u")
+                            if (name.isEmpty() || name.equals("null")) {
+                                if (m.has("u") && !m.isNull("u")) name = m.getString("u");
+                            }
+
+                            // 4. Cuối cùng nếu vẫn trống thì mới để "Thành viên"
+                            if (name.isEmpty()) name = "Thành viên";
 
                             String szEmail = m.optString("email", "Chưa có email");
 
                             // Hiển thị lên giao diện
-                            m_txtFullname.setText("Chào mừng tài khoản : " + fullname);
+                            String finalName = name; // Biến final để dùng trong runOnUiThread nếu cần
+                            m_txtFullname.setText("Chào mừng tài khoản : " + finalName);
                             m_txtEmail.setText("Địa chỉ thư điện tử : " + szEmail);
                         }
                     } catch (JSONException e) {
