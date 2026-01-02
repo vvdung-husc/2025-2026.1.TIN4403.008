@@ -244,3 +244,4 @@ async function POST_register(fullname, user, pass, res) {
 
   UTILS.apiResult(1, "Đăng ký thành công", res);
 }
+//

@@ -13,9 +13,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.project_02.ApiClient;
-import com.example.project_02.Utils;
-
 import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -30,7 +27,6 @@ public class RegisterActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
 
-        // Ánh xạ view
         edtUser = findViewById(R.id.edtUser);
         edtName = findViewById(R.id.edtName);
         edtEmail = findViewById(R.id.edtEmail);
@@ -39,16 +35,13 @@ public class RegisterActivity extends AppCompatActivity {
         btnCreate = findViewById(R.id.btnCreateUser);
         txtBack = findViewById(R.id.txtBack);
 
-        // Quay về màn hình login
         txtBack.setOnClickListener(v -> {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         });
 
-        // Xử lý đăng ký
         btnCreate.setOnClickListener(v -> register());
 
-        // Xử lý insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -56,9 +49,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    // ===============================
-    // HÀM ĐĂNG KÝ TÀI KHOẢN
-    // ===============================
     void register() {
         String user = edtUser.getText().toString().trim();
         String name = edtName.getText().toString().trim();
@@ -66,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         String pass1 = edtPass1.getText().toString();
         String pass2 = edtPass2.getText().toString();
 
-        // Validate
+        // ===== VALIDATE BẮT BUỘC =====
         if (user.length() < 3) {
             toast("Tên tài khoản phải ≥ 3 ký tự");
             return;
@@ -82,7 +72,8 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        if (!email.contains("@")) {
+        // Email CHỈ CHECK NẾU CÓ NHẬP
+        if (!email.isEmpty() && !email.contains("@")) {
             toast("Email không hợp lệ");
             return;
         }
@@ -91,10 +82,9 @@ public class RegisterActivity extends AppCompatActivity {
             JSONObject json = new JSONObject();
             json.put("username", user);
             json.put("password", pass1);
-            json.put("fullname", name);
-            json.put("email", email);
+            json.put("fullname", name);   // có thể rỗng
+            json.put("email", email);     // có thể rỗng
 
-            // Gọi API ở thread khác
             new Thread(() -> {
                 ApiClient.ApiResult r =
                         ApiClient.httpPost(ApiClient.URL_USER_REGISTER, json.toString(), null);
