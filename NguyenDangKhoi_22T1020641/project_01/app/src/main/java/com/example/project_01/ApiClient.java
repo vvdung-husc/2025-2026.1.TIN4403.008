@@ -21,10 +21,10 @@ public class ApiClient {
 
     // ĐÂY LÀ ĐỊNH NGHĨA URL CÁC API CHO APP DÙNG MẠNG NỘI BỘ - THAY ĐỊA CHỈ IP VÀ PORT ĐÚNG VỚI DỊCH VỤ ĐANG CHẠY
 
-//    public static final String URL_LOGIN = "http://192.168.56.1:4380/login";
-//    public static final String URL_USER_INFO = "http://192.168.56.1:4380/userinfo";
-//    public static final String URL_USER_UPDATE = "http://192.168.56.1:4380/userupdate";
-//    public static final String URL_USER_REGISTER = "http://192.168.56.1:4380/register";
+//    public static final String URL_LOGIN = "http://192.168.137.1:4380/login";
+//    public static final String URL_USER_INFO = "http://192.168.137.1:4380/userinfo";
+//    public static final String URL_USER_UPDATE = "http://192.168.137.1:4380/userupdate";
+//    public static final String URL_USER_REGISTER = "http://192.168.137.1:4380/register";
 
     private static final OkHttpClient client = new OkHttpClient();
 

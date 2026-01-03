@@ -83,7 +83,8 @@ public class UserActivity extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                .url("https://dev.husc.edu.vn/tin4403/api/userinfo")
+//                .url("https://dev.husc.edu.vn/tin4403/api/userinfo")
+                .url("192.168.137.136:4380/userinfo")
                 .post(formBody)
                 .header("token",token)
                 .build();

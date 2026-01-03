@@ -85,7 +85,8 @@ public class RegisterActivity extends AppCompatActivity {
                     .add("password",password)
                     .build();
             Request request = new Request.Builder()
-                    .url("https://dev.husc.edu.vn/tin4403/api/register")
+//                    .url("https://dev.husc.edu.vn/tin4403/api/register")
+                    .url("192.168.137.136:4380/register")
                     .post(formBody)
                     .build();
             OkHttpClient client = new OkHttpClient();
