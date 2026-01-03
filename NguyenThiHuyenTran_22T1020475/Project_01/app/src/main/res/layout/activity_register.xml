@@ -13,7 +13,7 @@
         android:layout_height="56dp"
         android:text="Đăng Ký Tài Khoản"
         android:textAlignment="center"
-        android:textColor="#673AB7"
+        android:textColor="#2196F3"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -75,5 +75,31 @@
         app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtPass1"
-        app:layout_constraintVertical_bias="0.165" />
+        app:layout_constraintVertical_bias="0.112" />
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="228dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="#2196F3"
+        android:text="Tạo mới tài khoản"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.54"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtPass2"
+        app:layout_constraintVertical_bias="0.066" />
+
+    <TextView
+        android:id="@+id/txtBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đã có tài khoản? Đăng nhập"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
 </androidx.constraintlayout.widget.ConstraintLayout>
