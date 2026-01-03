@@ -82,9 +82,20 @@ public class ApiClient {
                 .post(requestBody);
 
 
+        //if (headers != null) {
+        //for (Map.Entry<String, String> h : headers.entrySet()) {
+        //  builder.addHeader(h.getKey(), h.getValue());
+        //}
+        //}
         if (headers != null) {
             for (Map.Entry<String, String> h : headers.entrySet()) {
-                builder.addHeader(h.getKey(), h.getValue());
+                // Kiểm tra: Chỉ thêm nếu cả Key và Value đều không bị null
+                if (h.getKey() != null && h.getValue() != null) {
+                    builder.addHeader(h.getKey(), h.getValue());
+                } else {
+                    // Log ra để bạn biết cái nào đang bị trống
+                    Log.e("API_CLIENT", "Phát hiện Header bị null: " + h.getKey() + " = " + h.getValue());
+                }
             }
         }
 
