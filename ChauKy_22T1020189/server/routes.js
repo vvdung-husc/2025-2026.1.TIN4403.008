@@ -50,7 +50,7 @@ app.post("/register", async function (req, res) {
     // Chạy hàm xử lý logic
     await POST_register(user, pass, email, fullname, res);
 });
-  async function POST_register(user, pass, email, res) {
+  async function POST_register(user, pass, email, fullname, res) {
     // 1. Kiểm tra dữ liệu đầu vào (Validation)
     if (!user || user.length < 3) {
         return UTILS.apiResult(0, "Tài khoản phải từ 3 ký tự", res);

@@ -41,7 +41,7 @@ public class UserActivity extends AppCompatActivity {
         m_edtPassword1 = (EditText) findViewById(R.id.edtPassword1);
         m_edtPassword2 = (EditText) findViewById(R.id.edtPassword2);
         m_btnUpdate = (Button) findViewById(R.id.btnUpdate);
-        m_edtNewFullname = (EditText) findViewById(R.id.edtNewFullname);
+        //m_edtNewFullname = (EditText) findViewById(R.id.edtNewFullname);
         //cập nhật thông tin tài khoản đã đăng nhập
         getUserInfo();
 
@@ -62,20 +62,15 @@ public class UserActivity extends AppCompatActivity {
                 String email = m_edtNewEmail.getText().toString();// lấy thông tin EMAIL đã nhập
                 String pass = m_edtPassword1.getText().toString();// lấy thông tin mật khẩu đã nhập
                 String pass2 = m_edtPassword2.getText().toString();// lấy thông tin mật khẩu đã nhập
-                String fullname = m_edtNewFullname.getText().toString().trim();
-                if (email.isEmpty() && pass.isEmpty() && fullname.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Nhập ít nhất một thông tin để cập nhật", Toast.LENGTH_SHORT).show();
+                //String fullname = m_edtNewFullname.getText().toString().trim();
+                if (email.isEmpty() && pass.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Nhập Email hoặc Mật khẩu mới để cập nhật", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 JSONObject obj = new JSONObject();
                 try {
-                    // Cập nhật Họ và tên
-                    if (!fullname.isEmpty()) {
-                        obj.put("fullname", fullname);
-                    }
-
-                    // Kiểm tra và thêm Email
+                    // 3. Kiểm tra và thêm Email vào JSON
                     if (!email.isEmpty()) {
                         if (email.indexOf('@') == -1) {
                             Toast.makeText(getApplicationContext(), "Địa chỉ email không hợp lệ", Toast.LENGTH_SHORT).show();
@@ -84,24 +79,22 @@ public class UserActivity extends AppCompatActivity {
                         obj.put("email", email);
                     }
 
-                    // Kiểm tra và thêm Password
+                    // 4. Kiểm tra và thêm Password vào JSON
                     if (!pass.isEmpty()) {
                         if (pass.length() < 6 || pass2.isEmpty() || !pass.equals(pass2)) {
-                            Toast.makeText(getApplicationContext(), "Mật khẩu thay đổi không hợp lệ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Mật khẩu không khớp hoặc quá ngắn", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         obj.put("password", pass);
                     }
 
-                    // 4. Chuyển JSON thành chuỗi và gửi lên Server
+                    // Gửi dữ liệu cập nhật lên Server
                     String json = obj.toString();
                     Log.d("K46", "CLICK BUTTON UPDATE " + json);
                     updateUserInfo(json);
 
                 } catch (JSONException e) {
-                    // Xử lý lỗi nếu việc tạo JSON thất bại
                     Log.e("JSON_ERROR", "Lỗi tạo dữ liệu JSON: " + e.getMessage());
-                    Toast.makeText(getApplicationContext(), "Có lỗi xảy ra khi đóng gói dữ liệu", Toast.LENGTH_SHORT).show();
                 }
             }
         });
