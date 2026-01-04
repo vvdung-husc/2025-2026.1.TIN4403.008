@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "async": "^3.2.6",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.1",
+    "buffer": "^6.0.3",
+    "express": "^5.2.1",
+    "mongodb": "^7.0.0"
+  }
+}
