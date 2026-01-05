@@ -1,124 +1,149 @@
 package com.example.project1;
 
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Pattern;
+
 public class RegisterActivity extends AppCompatActivity {
-    TextView m_txtBack;
-    Button m_btnRegister;
-    // Khởi tạo biến điều khiển theo ID mới trong XML
-    EditText m_edtRegUsername, m_edtRegPassword, m_edtRegFullname, m_edtRegEmail, m_edtRegPasswordConfirm;
+
+    private EditText m_edtUsername;
+    private EditText m_edtPassword;
+    private EditText m_edtConfirmPassword;
+    private EditText m_edtFullname;
+    private EditText m_edtEmail;
+    private Button m_btnConfirm;
+    private Button m_btnBack;
+
+    // Pattern đơn giản để kiểm tra định dạng email
+    private static final Pattern EMAIL_ADDRESS =
+            Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                    "\\@" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    ")+");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
 
-        // Khởi tạo View
-        m_txtBack = (TextView) findViewById(R.id.txtBack);
-        m_btnRegister = (Button) findViewById(R.id.btnDoRegister); // ID đã sửa trong XML
+        // Ánh xạ ID - Đã được chuẩn hóa
+        m_edtUsername = findViewById(R.id.edtRegUsername);
+        m_edtPassword = findViewById(R.id.edtRegPassword);
+        m_edtConfirmPassword = findViewById(R.id.edtRegConfirmPassword);
+        m_edtFullname = findViewById(R.id.edtRegFullname);
+        m_edtEmail = findViewById(R.id.edtRegEmail);
+        m_btnConfirm = findViewById(R.id.btnRegConfirm);
+        m_btnBack = findViewById(R.id.btnRegBack);
 
-        m_edtRegUsername = (EditText) findViewById(R.id.edtRegUsername);
-        m_edtRegPassword = (EditText) findViewById(R.id.edtRegPassword);
-        m_edtRegPasswordConfirm = (EditText) findViewById(R.id.edtRegPasswordConfirm); // ID đã thêm
-        m_edtRegFullname = (EditText) findViewById(R.id.edtRegFullname);
-        m_edtRegEmail = (EditText) findViewById(R.id.edtRegEmail); // ID đã thêm
-
-        m_txtBack.setOnClickListener(new View.OnClickListener() {
+        m_btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                new RegisterTask().execute();
+            }
+        });
+
+        m_btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
         });
-
-        m_btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String user = m_edtRegUsername.getText().toString();
-                String pass = m_edtRegPassword.getText().toString();
-                String pass2 = m_edtRegPasswordConfirm.getText().toString();
-                String name = m_edtRegFullname.getText().toString();
-                String email = m_edtRegEmail.getText().toString();
-
-                // Kiểm tra ràng buộc
-                if (user.length() < 3 || name.isEmpty() || email.isEmpty() || email.indexOf('@') == -1) {
-                    Utils.showAlert(RegisterActivity.this, "Lỗi", "Vui lòng nhập đầy đủ Tài khoản, Họ tên, và Email hợp lệ.");
-                    return;
-                }
-                if (pass.length() < 6 || !pass.equals(pass2)) {
-                    Utils.showAlert(RegisterActivity.this, "Lỗi", "Mật khẩu phải từ 6 ký tự và nhập lại phải khớp.");
-                    return;
-                }
-
-                okhttpRegister(user, pass, name, email);
-            }
-        });
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
     }
 
-    void okhttpRegister(String user, String pass, String name, String email) {
-        String json;
-        try {
-            JSONObject obj = new JSONObject();
-            obj.put("username", user);
-            obj.put("password", pass);
-            obj.put("fullname", name);
-            obj.put("email", email);
-            json = obj.toString();
-        } catch (JSONException e) {
-            Toast.makeText(this, "Lỗi tạo dữ liệu đăng ký", Toast.LENGTH_SHORT).show();
-            return;
+    private boolean isDataValid(String username, String password, String confirmPassword, String fullname, String email) {
+        if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || fullname.isEmpty() || email.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập đầy đủ tất cả các trường.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!password.equals(confirmPassword)) {
+            Toast.makeText(this, "Mật khẩu xác nhận không khớp.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Định dạng Email không hợp lệ.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private class RegisterTask extends AsyncTask<Void, Void, ApiClient.ApiResult> {
+
+        private String username, password, fullname, email;
+
+        @Override
+        protected void onPreExecute() {
+            username = m_edtUsername.getText().toString().trim();
+            password = m_edtPassword.getText().toString().trim();
+            String confirmPassword = m_edtConfirmPassword.getText().toString().trim();
+            fullname = m_edtFullname.getText().toString().trim();
+            email = m_edtEmail.getText().toString().trim();
+
+            if (!isDataValid(username, password, confirmPassword, fullname, email)) {
+                cancel(true);
+            }
         }
 
-        new Thread(() -> {
-            ApiClient.ApiResult r = ApiClient.httpPost(ApiClient.URL_USER_REGISTER, json, null);
+        @Override
+        protected ApiClient.ApiResult doInBackground(Void... voids) {
+            if (isCancelled()) {
+                return null;
+            }
 
-            runOnUiThread(() -> {
+            try {
+                JSONObject jsonPayload = new JSONObject();
+                jsonPayload.put("username", username);
+                jsonPayload.put("password", password);
+                jsonPayload.put("fullname", fullname);
+                jsonPayload.put("email", email);
+
+                return ApiClient.httpPost(ApiClient.URL_USER_REGISTER, jsonPayload.toString(), null);
+
+            } catch (JSONException e) {
+                return new ApiClient.ApiResult(false, "Lỗi tạo dữ liệu JSON: " + e.getMessage(), 0);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ApiClient.ApiResult result) {
+            if (result == null) return;
+
+            if (result.success && result.httpCode == 200) {
                 try {
-                    JSONObject obj = new JSONObject(r.body);
-                    int ret = obj.getInt("r");
-                    String msg = obj.getString("m");
+                    JSONObject jsonResponse = new JSONObject(result.body);
+                    String status = jsonResponse.optString("status");
+                    String msg = jsonResponse.optString("msg", "Đăng ký thành công!");
 
-                    if (r.success && ret == 1) {
-                        Log.w("API", "Register OK: " + r.httpCode + " " + r.body);
-                        Utils.showAlert(RegisterActivity.this, "Thành công", "Đăng ký tài khoản thành công! Bạn có thể đăng nhập ngay.");
+                    Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_LONG).show();
 
-                        // Chuyển về màn hình Login
-                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(i);
+                    if ("success".equals(status)) {
                         finish();
-                    } else {
-                        Log.e("API", "Register ERR: " + r.httpCode + " " + r.body);
-                        Utils.showAlert(RegisterActivity.this, "Lỗi Đăng ký", msg);
                     }
                 } catch (JSONException e) {
-                    Log.e("API", "Register FAILED: " + r.httpCode + " " + r.body);
-                    Toast.makeText(this, "Lỗi ParseJSON: " + r.body, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Lỗi phân tích phản hồi server.", Toast.LENGTH_LONG).show();
                 }
-            });
-        }).start();
+
+            } else {
+                String errorMessage = "Đăng ký thất bại. Code: " + result.httpCode;
+                if (result.body != null && !result.body.isEmpty()) {
+                    try {
+                        JSONObject jsonError = new JSONObject(result.body);
+                        errorMessage = jsonError.optString("msg", errorMessage);
+                    } catch (JSONException ignored) {}
+                }
+                Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

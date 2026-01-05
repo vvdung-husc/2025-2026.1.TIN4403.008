@@ -1,17 +1,19 @@
+// FILE: build.gradle.kts (Module: app)
+// Vị trí: app/build.gradle.kts
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    // ... nếu bạn đang dùng các plugins khác (ví dụ: kotlin-kapt)
 }
 
 android {
-    namespace = "com.example.project1" // Đảm bảo namespace này khớp với project của bạn
-    compileSdk = 34 // Hoặc phiên bản mới nhất bạn đang dùng
+    namespace = "com.example.project1"
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.project1"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -21,33 +23,33 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
 dependencies {
-    // AndroidX Dependencies (Khắc phục lỗi Unresolved reference 'appcompat', 'activity', 'constraintlayout')
-    implementation("androidx.core:core-ktx:1.12.0")
+    // OkHttp (Khắc phục lỗi ApiClient.java)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    // Sử dụng chuỗi dependency trực tiếp (Khắc phục lỗi receiver type mismatch)
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.activity:activity:1.8.2")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.activity:activity-ktx:1.8.2")
 
-    // API Dependency: OkHttp (Khắc phục lỗi 'okhttp3' trong ApiClient.java)
-    // Tôi khuyên dùng 4.x ổn định này:
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    // Hoặc nếu bạn muốn dùng 5.x mới nhất:
-    // implementation("com.squareup.okhttp3:okhttp:5.0.0-rc1")
-
-    // Testing Dependencies (Khắc phục lỗi Unresolved reference 'junit', 'espresso')
+    // Testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

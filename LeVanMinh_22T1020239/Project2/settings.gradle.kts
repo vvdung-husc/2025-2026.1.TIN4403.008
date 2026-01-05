@@ -1,12 +1,8 @@
+// FILE: settings.gradle.kts (Thường nằm ở thư mục gốc của dự án)
+
 pluginManagement {
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
+        google()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -19,6 +15,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "project2"
+rootProject.name = "Project2"
 include(":app")
- 

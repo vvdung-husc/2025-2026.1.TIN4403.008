@@ -2,21 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
     tools:context=".UserActivity">
 
     <TextView
         android:id="@+id/tvUserTitle"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="Thông tin Tài khoản"
-        android:textSize="24sp"
+        android:textColor="#3F51B5"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:gravity="center"
-        android:textColor="#4CAF50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,153 +23,128 @@
         android:id="@+id/tvLabelUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
         android:text="Tài khoản:"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvUserTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvUserTitle" />
 
     <TextView
         android:id="@+id/tvDisplayUsername"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="[Tên tài khoản]"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="32dp"
+        android:text="..."
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvLabelUsername"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvLabelUsername"
-        app:layout_constraintTop_toTopOf="@+id/tvLabelUsername" />
+        app:layout_constraintStart_toEndOf="@+id/tvLabelUsername" />
 
     <TextView
         android:id="@+id/tvLabelFullname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:text="Họ và tên:"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvDisplayUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelUsername" />
 
     <TextView
         android:id="@+id/tvDisplayFullname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="[Họ tên người dùng]"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvLabelFullname"
-        app:layout_constraintTop_toTopOf="@+id/tvLabelFullname" />
+        android:text="..."
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvLabelFullname"
+        app:layout_constraintEnd_toEndOf="@+id/tvDisplayUsername"
+        app:layout_constraintStart_toStartOf="@+id/tvDisplayUsername" />
 
     <TextView
         android:id="@+id/tvLabelEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
-        android:text="Email:"
-        android:textStyle="bold"
+        android:text="Email hiện tại:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvDisplayFullname" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelFullname" />
 
     <TextView
         android:id="@+id/tvDisplayEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="[Email người dùng]"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvLabelEmail"
-        app:layout_constraintTop_toTopOf="@+id/tvLabelEmail" />
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="24dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvDisplayEmail" />
-
-    <TextView
-        android:id="@+id/txtNewEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Nhập địa chỉ Email mới (Tùy chọn)"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider" />
+        android:text="..."
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvLabelEmail"
+        app:layout_constraintEnd_toEndOf="@+id/tvDisplayUsername"
+        app:layout_constraintStart_toStartOf="@+id/tvDisplayUsername" />
 
     <EditText
         android:id="@+id/edtNewEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Để trống nếu không đổi"
+        android:layout_marginTop="24dp"
+        android:hint="Email mới (Không bắt buộc)"
         android:inputType="textEmailAddress"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNewEmail" />
-
-    <TextView
-        android:id="@+id/txtNewPassword1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Nhập mật khẩu mới (Tùy chọn)"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edtNewEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelEmail"
+        app:layout_constraintWidth_percent="0.8" />
 
     <EditText
         android:id="@+id/edtPassword1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ít nhất 6 ký tự"
+        android:layout_marginTop="8dp"
+        android:hint="Mật khẩu mới (Bỏ trống nếu không đổi)"
         android:inputType="textPassword"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNewPassword1"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-        android:id="@+id/txtNewPassword2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Nhập lại mật khẩu mới"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtPassword1" />
+        app:layout_constraintTop_toBottomOf="@+id/edtNewEmail"
+        app:layout_constraintWidth_percent="0.8" />
 
     <EditText
         android:id="@+id/edtPassword2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Xác nhận mật khẩu"
+        android:layout_marginTop="8dp"
+        android:hint="Xác nhận mật khẩu mới"
         android:inputType="textPassword"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNewPassword2"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/edtPassword1"
+        app:layout_constraintWidth_percent="0.8" />
 
     <Button
         android:id="@+id/btnUpdate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Cập nhật thông tin"
+        android:layout_marginTop="32dp"
+        android:text="CẬP NHẬT THÔNG TIN"
+        android:minHeight="48dp"
         android:backgroundTint="#4CAF50"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtPassword2"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintWidth_percent="0.8" />
 
     <Button
         android:id="@+id/btnLogout"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Thoát (Đăng xuất)"
-        android:textAllCaps="false"
-        android:textStyle="bold"
+        android:text="ĐĂNG XUẤT"
+        android:minHeight="48dp"
+        android:textColor="#F44336"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnUpdate" />
+        app:layout_constraintTop_toBottomOf="@+id/btnUpdate"
+        app:layout_constraintWidth_percent="0.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
