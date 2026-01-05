@@ -52,3 +52,7 @@ CDBLTDD.prototype.modifyUser = async function (user, modify){
     //console.log(oDoc);
     return oDoc;
 } 
+CDBLTDD.prototype.createUser = async function (u) {
+    return await this.db_.collection("users").insertOne(u);
+}
+
