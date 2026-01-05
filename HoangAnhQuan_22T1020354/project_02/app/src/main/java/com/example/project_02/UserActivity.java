@@ -31,6 +31,9 @@ public class UserActivity extends AppCompatActivity {
     private static final String TAG = "API_USERINFO";
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    // 🔹 API máy cá nhân
+    private static final String BASE_URL = "http://192.168.1.11:8080";
+
     TextView txtUsername, txtFullname, txtEmail;
     Button btnLogout, btnEdit;
     String token;
@@ -47,14 +50,13 @@ public class UserActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         btnEdit = findViewById(R.id.btnEdit);
 
-        // Nhận token từ Intent
+        // Nhận token
         token = getIntent().getStringExtra("token");
-        Log.d("TOKEN_DEBUG", "Token nhận được (raw): " + token);
+        Log.d("TOKEN_DEBUG", "Token nhận được: " + token);
 
         if (token == null || token.isEmpty()) {
             Toast.makeText(this, "Không tìm thấy token đăng nhập!", Toast.LENGTH_LONG).show();
         } else {
-            // Gọi API lấy thông tin người dùng
             getUserInfo(token);
         }
 
@@ -63,7 +65,6 @@ public class UserActivity extends AppCompatActivity {
             finish();
         });
 
-        // Nút chỉnh sửa tài khoản
         btnEdit.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), UpdateActivity.class);
             intent.putExtra("token", token);
@@ -77,90 +78,63 @@ public class UserActivity extends AppCompatActivity {
         });
     }
 
-    /** Gọi API /userinfo để lấy thông tin người dùng **/
+    /** 🔹 Gọi API lấy thông tin người dùng **/
     private void getUserInfo(String token) {
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create("{}", JSON);
 
         Request request = new Request.Builder()
-                .url("https://dev.husc.edu.vn/tin4403/api/userinfo")
+                .url(BASE_URL + "/api/userinfo")
                 .post(body)
-                .addHeader("token", token)
                 .addHeader("Authorization", "Bearer " + token)
                 .build();
 
-        Log.d(TAG, "Gửi request tới /userinfo với token (tóm tắt): " + summarizeToken(token));
+        Log.d(TAG, "Request: " + request.url());
 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "onFailure: " + e.getMessage(), e);
+                Log.e(TAG, "onFailure", e);
                 runOnUiThread(() ->
-                        Toast.makeText(getApplicationContext(), "Lỗi kết nối máy chủ: " + e.getMessage(), Toast.LENGTH_LONG).show()
-                );
+                        Toast.makeText(getApplicationContext(),
+                                "Không kết nối được server!",
+                                Toast.LENGTH_LONG).show());
             }
 
             @Override
-            public void onResponse(Call call, Response response) {
-                String responseBody = "";
-                int code = response.code();
-                try {
-                    if (response.body() != null) {
-                        responseBody = response.body().string();
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG, "Lỗi đọc body: " + e.getMessage(), e);
-                }
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body() != null ? response.body().string() : "";
 
-                Log.d(TAG, "HTTP Code: " + code);
-                Log.d(TAG, "Response headers: " + Objects.requireNonNull(response).headers().toString());
-                Log.d(TAG, "Response body: " + responseBody);
+                Log.d(TAG, "HTTP " + response.code());
+                Log.d(TAG, "BODY: " + responseBody);
 
-                final String finalBody = responseBody;
                 runOnUiThread(() -> {
                     if (!response.isSuccessful()) {
-                        txtUsername.setText("ERROR: HTTP " + code);
-                        txtFullname.setText(finalBody);
-                        txtEmail.setText("");
-                        Toast.makeText(getApplicationContext(), "Không thể tải thông tin người dùng!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),
+                                "Lỗi tải thông tin!",
+                                Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     try {
-                        JSONObject json = new JSONObject(finalBody);
-                        JSONObject info;
-                        if (json.has("m") && json.get("m") instanceof JSONObject) {
-                            info = json.getJSONObject("m");
-                        } else if (json.has("data") && json.get("data") instanceof JSONObject) {
-                            info = json.getJSONObject("data");
-                        } else {
-                            info = json;
-                        }
+                        JSONObject json = new JSONObject(responseBody);
 
-                        String username = info.optString("username", "Chưa có");
-                        String fullname = info.optString("fullname", "Chưa có");
-                        String email = info.optString("email", "Chưa có");
+                        String username = json.optString("username", "N/A");
+                        String fullname = json.optString("fullname", "N/A");
+                        String email = json.optString("email", "N/A");
 
                         txtUsername.setText("Tài khoản: " + username);
                         txtFullname.setText("Họ tên: " + fullname);
                         txtEmail.setText("Email: " + email);
 
                     } catch (Exception e) {
-                        Log.e(TAG, "Lỗi parse JSON: " + e.getMessage(), e);
-                        txtUsername.setText("Không parse được JSON");
-                        txtFullname.setText(finalBody);
-                        txtEmail.setText("");
-                        Toast.makeText(getApplicationContext(), "Lỗi đọc dữ liệu người dùng!", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "JSON error", e);
+                        Toast.makeText(getApplicationContext(),
+                                "Lỗi đọc dữ liệu!",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
             }
         });
-    }
-
-    // Tóm tắt token để debug mà không lộ toàn bộ
-    private String summarizeToken(String token) {
-        if (token == null) return "null";
-        if (token.length() <= 10) return token;
-        return token.substring(0, 6) + "..." + token.substring(token.length() - 4);
     }
 }

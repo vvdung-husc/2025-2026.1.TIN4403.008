@@ -1,126 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F6F2FA"
     tools:context=".RegisterActivity">
 
-    <!-- Tiêu đề -->
+    <!-- Title -->
     <TextView
-        android:id="@+id/titleRegister"
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Đăng ký tài khoản"
-        android:textSize="20sp"
+        android:text="Đăng ký tài khoản mới"
+        android:textSize="22sp"
         android:textStyle="bold"
+        android:textColor="#3F3D56"
+        android:layout_marginTop="32dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="40dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Label: Tài khoản -->
-    <TextView
-        android:id="@+id/labelUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tên tài khoản"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/titleRegister"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"/>
-
-    <!-- EditText: Username -->
+    <!-- Username -->
     <EditText
-        android:id="@+id/registerUsername"
-        android:layout_width="0dp"
+        android:id="@+id/edtUser"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Nhập tên tài khoản"
-        android:inputType="text"
-        android:textColorHint="#A6A6A6"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/labelUsername"
+        android:layout_marginTop="28dp"
+        android:hint="Tên tài khoản"
+        android:inputType="textPersonName"
+        android:padding="12dp"
+        android:backgroundTint="#8E7CC3"
+        app:layout_constraintTop_toBottomOf="@id/textView4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Label: Email -->
-    <TextView
-        android:id="@+id/labelEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/registerUsername"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"/>
-
-    <!-- EditText: Password -->
+    <!-- Full name -->
     <EditText
-        android:id="@+id/registerEmail"
-        android:layout_width="0dp"
+        android:id="@+id/edtName"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Nhập Email"
-        android:inputType="text"
-        android:textColorHint="#A6A6A6"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/labelEmail"
+        android:layout_marginTop="12dp"
+        android:hint="Họ và tên"
+        android:inputType="textPersonName"
+        android:padding="12dp"
+        android:backgroundTint="#8E7CC3"
+        app:layout_constraintTop_toBottomOf="@id/edtUser"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Label: Xác nhận mật khẩu -->
-    <TextView
-        android:id="@+id/labelPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mật khẩu"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/registerEmail"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"/>
-
-    <!-- EditText: Password -->
+    <!-- Email -->
     <EditText
-        android:id="@+id/registerPassword"
-        android:layout_width="0dp"
+        android:id="@+id/edtEmail"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Nhập mật khẩu"
+        android:layout_marginTop="12dp"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:backgroundTint="#8E7CC3"
+        app:layout_constraintTop_toBottomOf="@id/edtName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Password -->
+    <EditText
+        android:id="@+id/edtPass1"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="Mật khẩu"
         android:inputType="textPassword"
-        android:textColorHint="#A6A6A6"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/labelPassword"
+        android:padding="12dp"
+        android:backgroundTint="#8E7CC3"
+        app:layout_constraintTop_toBottomOf="@id/edtEmail"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Button: Đăng ký -->
+    <!-- Confirm password -->
+    <EditText
+        android:id="@+id/edtPass2"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="Nhập lại mật khẩu"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:backgroundTint="#8E7CC3"
+        app:layout_constraintTop_toBottomOf="@id/edtPass1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Create button -->
     <Button
-        android:id="@+id/registerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Đăng ký"
-        app:layout_constraintTop_toBottomOf="@id/registerPassword"
+        android:id="@+id/btnCreateUser"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="28dp"
+        android:text="Tạo mới tài khoản"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#6A5AAE"
+        app:layout_constraintTop_toBottomOf="@id/edtPass2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- TextView: Quay lại đăng nhập -->
+    <!-- Back to login -->
     <TextView
-        android:id="@+id/backToLogin"
-        android:layout_width="wrap_content"
+        android:id="@+id/txtBack"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Đã có tài khoản? Đăng nhập"
-        android:textColor="#2196F3"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/registerButton"
+        android:layout_marginTop="20dp"
+        android:text="Đã có tài khoản? Đăng nhập."
+        android:textAlignment="center"
+        android:textColor="#6A5AAE"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/btnCreateUser"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
