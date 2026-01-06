@@ -1,8 +1,9 @@
 package com.example.project_1;
-
-import java.util.Map;
+import android.util.Log;
 
 import okhttp3.*;
+import java.io.IOException;
+import java.util.Map;
 
 //Định nghĩa lớp API để nhận thông tin từ server
 public class ApiClient {
@@ -20,10 +21,10 @@ public class ApiClient {
 
     // ĐÂY LÀ ĐỊNH NGHĨA URL CÁC API CHO APP DÙNG MẠNG NỘI BỘ - THAY ĐỊA CHỈ IP VÀ PORT ĐÚNG VỚI DỊCH VỤ ĐANG CHẠY
 
-    public static final String URL_LOGIN = "http://192.168.56.1:4380/login";
-    public static final String URL_USER_INFO = "http://192.168.56.1:4380/userinfo";
-    public static final String URL_USER_UPDATE = "http://192.168.56.1:4380/userupdate";
-    public static final String URL_USER_REGISTER = "http://192.168.56.1:4380/register";
+    public static final String URL_LOGIN = "http://192.168.1.18:4380/login";
+    public static final String URL_USER_INFO = "http://192.168.1.18:4380/userinfo";
+    public static final String URL_USER_UPDATE = "http://192.168.1.18:4380/userupdate";
+    public static final String URL_USER_REGISTER = "http://192.168.1.18:4380/register";
 
     private static final OkHttpClient client = new OkHttpClient();
 
@@ -90,7 +91,10 @@ public class ApiClient {
         try (Response response = client.newCall(builder.build()).execute()) {
             String res = response.body() != null ? response.body().string() : "";
 
-            return new ApiResult(response.isSuccessful(), res, response.code());
+            //return new ApiResult(response.isSuccessful(), res, response.code());
+            boolean ok = (res != null && res.trim().startsWith("{"));
+            return new ApiResult(ok, res, response.code());
+
 
         } catch (Exception e) {
             return new ApiResult(false, e.getMessage(), e.hashCode());
