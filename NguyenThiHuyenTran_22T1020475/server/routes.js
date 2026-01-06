@@ -39,8 +39,12 @@ var appRouter = function (app) {
     // 	res.status(200).send("FAILED - LOGIN API [" + user + "/" + pass +"]");
   });
 
-  app.post("/register", function (req, res) {
-    res.status(200).send("REGISTER API");
+  app.post("/register", async function (req, res) {
+    var user = req.body.username;
+    var pass = req.body.password;
+    var name = req.body.fullname;
+
+    POST_register(user, pass, name, res);
   });
 
   app.post("/userupdate", function (req, res) {
@@ -145,6 +149,43 @@ async function POST_userUpdate(token, info, res) {
     return;
   }
   UTILS.apiResult(1, "[" + oToken.u + "] Cập nhật thành công", res);
+}
+
+async function POST_register(user, pass, name, res) {
+    // 1. Kiểm tra tính hợp lệ của dữ liệu đầu vào
+    if (!user || user.length < 3) {
+        UTILS.apiResult(-1, "Tên tài khoản tối thiểu 3 ký tự", res);
+        return;
+    }
+    if (!pass || pass.length < 6) {
+        UTILS.apiResult(-2, "Mật khẩu tối thiểu 6 ký tự", res);
+        return;
+    }
+    if (!name) {
+        UTILS.apiResult(-3, "Vui lòng nhập họ và tên", res);
+        return;
+    }
+
+    // 2. Tạo đối tượng người dùng mới
+    var newUser = {
+        username: user,
+        password: pass,
+        fullname: name,
+        email: "" // Có thể để trống hoặc lấy thêm từ req.body.email
+    };
+
+    // 3. Gọi hàm vào DB (Giả sử file DB của bạn đã có hàm addUser hoặc tương đương)
+    // Lưu ý: Bạn cần kiểm tra file ltdd_db.js xem hàm thêm user tên là gì
+    try {
+        const result = await DB.addUser(newUser); 
+        if (result) {
+            UTILS.apiResult(1, "Đăng ký tài khoản thành công", res);
+        } else {
+            UTILS.apiResult(-4, "Tài khoản đã tồn tại hoặc lỗi DB", res);
+        }
+    } catch (e) {
+        UTILS.apiResult(-5, "Lỗi Server: " + e.message, res);
+    }
 }
 
 //Hàm giải mã token đã được mã hóa từ hàm POST_login khi đăng nhập thành công
