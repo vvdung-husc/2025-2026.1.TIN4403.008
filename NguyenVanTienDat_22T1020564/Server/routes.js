@@ -1,6 +1,6 @@
 
 const Buffer = require('buffer/').Buffer;
-const DB = require("./_global/ltdd_db")
+const DB = require("./_global/ltdd_db.js")
 const UTILS = require('./_global/utils.js');
 
 var appRouter = function (app) {
@@ -39,9 +39,13 @@ var appRouter = function (app) {
     // 	res.status(200).send("FAILED - LOGIN API [" + user + "/" + pass +"]");
   });
 
-  app.post("/register", function (req, res) {
-    res.status(200).send("REGISTER API");
-  });
+ app.post("/register", async function (req, res) {
+    var user = req.body.username;
+    var pass = req.body.password;
+    var fullname = req.body.fullname;
+
+    POST_register(user, pass, fullname, res);
+});
 
   app.post("/userupdate", function (req, res) {
     var token = req.headers.token;
@@ -84,6 +88,45 @@ async function POST_login(user, pass, res) {
   //console.log(token);
   UTILS.apiResult(1, token, res);
 }
+async function POST_register(user, pass, fullname, res) {
+
+    if (user == undefined || !user || user.length < 3) {
+        UTILS.apiResult(-1, "Tài khoản không hợp lệ", res);
+        return;
+    }
+
+    if (pass == undefined || !pass || pass.length < 6) {
+        UTILS.apiResult(-2, "Mật khẩu không hợp lệ", res);
+        return;
+    }
+
+    if (fullname == undefined || !fullname || fullname.length < 3) {
+        UTILS.apiResult(-3, "Họ tên không hợp lệ", res);
+        return;
+    }
+
+    // kiểm tra user đã tồn tại chưa
+    if (await DB.getUser(user)) {
+        UTILS.apiResult(-4, "Tài khoản đã tồn tại", res);
+        return;
+    }
+
+    // tạo user mới
+    var u = await DB.createUser({
+        username: user,
+        password: pass,
+        fullname: fullname
+    });
+
+    if (!u) {
+        UTILS.apiResult(-5, "Không thể tạo tài khoản", res);
+        return;
+    }
+
+    UTILS.apiResult(1, "Đăng ký thành công", res);
+}
+
+
 async function POST_userInfo(token, res) {
   //console.log("userinfo TOKEN: [",token,"]");    
 

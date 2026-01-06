@@ -2,108 +2,112 @@ package com.example.project_02;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText registerUsername, registerEmail, registerPassword;
-    private Button registerButton;
-    private TextView backToLogin;
-
-    // Định nghĩa MediaType JSON cho body request
-    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    EditText edtUser, edtName, edtEmail, edtPass1, edtPass2;
+    Button btnCreate;
+    TextView txtBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
 
-        // Ánh xạ view
-        registerUsername = findViewById(R.id.registerUsername);
-        registerEmail = findViewById(R.id.registerEmail);
-        registerPassword = findViewById(R.id.registerPassword);
-        registerButton = findViewById(R.id.registerButton);
-        backToLogin = findViewById(R.id.backToLogin);
+        edtUser = findViewById(R.id.edtUser);
+        edtName = findViewById(R.id.edtName);
+        edtEmail = findViewById(R.id.edtEmail);
+        edtPass1 = findViewById(R.id.edtPass1);
+        edtPass2 = findViewById(R.id.edtPass2);
+        btnCreate = findViewById(R.id.btnCreateUser);
+        txtBack = findViewById(R.id.txtBack);
 
-        // Khi nhấn nút Đăng ký
-        registerButton.setOnClickListener(v -> {
-            String user = registerUsername.getText().toString().trim();
-            String email = registerEmail.getText().toString().trim();
-            String pass = registerPassword.getText().toString().trim();
-
-            if (user.isEmpty() || email.isEmpty() || pass.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-            } else {
-                try {
-                    apiRegister(user, email, pass);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        // Khi nhấn “Đã có tài khoản? Đăng nhập”
-        backToLogin.setOnClickListener(v -> {
+        txtBack.setOnClickListener(v -> {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         });
+
+        btnCreate.setOnClickListener(v -> register());
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
     }
 
-    // Gửi request đăng ký bằng OkHttp
-    void apiRegister(String user, String email, String pass) throws IOException {
-        String json = "{\"username\":\"" + user + "\",\"email\":\"" + email + "\",\"password\":\"" + pass + "\"}";
-        Log.d("REGISTER_JSON", json);
+    void register() {
+        String user = edtUser.getText().toString().trim();
+        String name = edtName.getText().toString().trim();
+        String email = edtEmail.getText().toString().trim();
+        String pass1 = edtPass1.getText().toString();
+        String pass2 = edtPass2.getText().toString();
 
-        RequestBody body = RequestBody.create(json, JSON);
-        Request request = new Request.Builder()
-                .url("https://dev.husc.edu.vn/tin4403/api/register") // ⚠️ sửa lại “rgister” → “register”
-                .post(body)
-                .build();
+        // ===== VALIDATE BẮT BUỘC =====
+        if (user.length() < 3) {
+            toast("Tên tài khoản phải ≥ 3 ký tự");
+            return;
+        }
 
-        OkHttpClient client = new OkHttpClient();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                runOnUiThread(() ->
-                        Toast.makeText(getApplicationContext(),
-                                "Lỗi kết nối: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-                Log.e("REGISTER_FAIL", e.getMessage());
-                call.cancel();
-            }
+        if (pass1.length() < 6) {
+            toast("Mật khẩu phải ≥ 6 ký tự");
+            return;
+        }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String result = response.body().string();
-                Log.d("REGISTER_RESPONSE", result);
+        if (!pass1.equals(pass2)) {
+            toast("Mật khẩu nhập lại không khớp");
+            return;
+        }
+
+        // Email CHỈ CHECK NẾU CÓ NHẬP
+        if (!email.isEmpty() && !email.contains("@")) {
+            toast("Email không hợp lệ");
+            return;
+        }
+
+        try {
+            JSONObject json = new JSONObject();
+            json.put("username", user);
+            json.put("password", pass1);
+            json.put("fullname", name);   // có thể rỗng
+            json.put("email", email);     // có thể rỗng
+
+            new Thread(() -> {
+                ApiClient.ApiResult r =
+                        ApiClient.httpPost(ApiClient.URL_USER_REGISTER, json.toString(), null);
 
                 runOnUiThread(() -> {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-                        finish();
+                    if (r.success) {
+                        Utils.showAlert(
+                                RegisterActivity.this,
+                                "Thành công",
+                                "Đăng ký tài khoản thành công!"
+                        );
                     } else {
-                        Toast.makeText(getApplicationContext(),
-                                "Đăng ký thất bại: " + result, Toast.LENGTH_SHORT).show();
+                        toast("Lỗi: " + r.body);
                     }
                 });
-            }
-        });
+            }).start();
+
+        } catch (Exception e) {
+            toast("Lỗi xử lý dữ liệu");
+        }
+    }
+
+    void toast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

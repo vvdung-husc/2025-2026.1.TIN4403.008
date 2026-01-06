@@ -3,7 +3,9 @@ package com.example.project_02;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,30 +15,20 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.project_02.ApiClient;
+import com.example.project_02.Utils;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.Objects;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserActivity extends AppCompatActivity {
 
-    private static final String TAG = "API_USERINFO";
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
-    // 🔹 API máy cá nhân
-    private static final String BASE_URL = "http://192.168.1.11:8080";
-
-    TextView txtUsername, txtFullname, txtEmail;
-    Button btnLogout, btnEdit;
-    String token;
+    TextView m_txtFullname, m_txtEmail;
+    EditText m_edtNewFullname, m_edtNewEmail, m_edtPassword1, m_edtPassword2;
+    Button m_btnLogout, m_btnUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,32 +36,25 @@ public class UserActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user);
 
-        txtUsername = findViewById(R.id.txtUsername);
-        txtFullname = findViewById(R.id.txtFullname);
-        txtEmail = findViewById(R.id.txtEmail);
-        btnLogout = findViewById(R.id.btnLogout);
-        btnEdit = findViewById(R.id.btnEdit);
+        m_txtFullname = findViewById(R.id.txtFullname);
+        m_txtEmail = findViewById(R.id.txtEmail);
 
-        // Nhận token
-        token = getIntent().getStringExtra("token");
-        Log.d("TOKEN_DEBUG", "Token nhận được: " + token);
+        m_edtNewFullname = findViewById(R.id.edtNewFullname);
+        m_edtNewEmail = findViewById(R.id.edtNewEmail);
+        m_edtPassword1 = findViewById(R.id.edtPassword1);
+        m_edtPassword2 = findViewById(R.id.edtPassword2);
 
-        if (token == null || token.isEmpty()) {
-            Toast.makeText(this, "Không tìm thấy token đăng nhập!", Toast.LENGTH_LONG).show();
-        } else {
-            getUserInfo(token);
-        }
+        m_btnUpdate = findViewById(R.id.btnUpdate);
+        m_btnLogout = findViewById(R.id.btnLogout);
 
-        btnLogout.setOnClickListener(v -> {
+        getUserInfo();
+
+        m_btnLogout.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         });
 
-        btnEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), UpdateActivity.class);
-            intent.putExtra("token", token);
-            startActivity(intent);
-        });
+        m_btnUpdate.setOnClickListener(v -> updateInfo());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -78,63 +63,95 @@ public class UserActivity extends AppCompatActivity {
         });
     }
 
-    /** 🔹 Gọi API lấy thông tin người dùng **/
-    private void getUserInfo(String token) {
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create("{}", JSON);
+    void updateInfo() {
+        String fullname = m_edtNewFullname.getText().toString().trim();
+        String email = m_edtNewEmail.getText().toString().trim();
+        String pass1 = m_edtPassword1.getText().toString();
+        String pass2 = m_edtPassword2.getText().toString();
 
-        Request request = new Request.Builder()
-                .url(BASE_URL + "/api/userinfo")
-                .post(body)
-                .addHeader("Authorization", "Bearer " + token)
-                .build();
+        if (fullname.isEmpty() && email.isEmpty() && pass1.isEmpty()) {
+            Toast.makeText(this, "Phải nhập ít nhất 1 thông tin để cập nhật", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        Log.d(TAG, "Request: " + request.url());
+        JSONObject obj = new JSONObject();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "onFailure", e);
-                runOnUiThread(() ->
-                        Toast.makeText(getApplicationContext(),
-                                "Không kết nối được server!",
-                                Toast.LENGTH_LONG).show());
+        try {
+            if (!fullname.isEmpty())
+                obj.put("fullname", fullname);
+
+            if (!email.isEmpty()) {
+                if (!email.contains("@")) {
+                    Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                obj.put("email", email);
             }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseBody = response.body() != null ? response.body().string() : "";
-
-                Log.d(TAG, "HTTP " + response.code());
-                Log.d(TAG, "BODY: " + responseBody);
-
-                runOnUiThread(() -> {
-                    if (!response.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(),
-                                "Lỗi tải thông tin!",
-                                Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    try {
-                        JSONObject json = new JSONObject(responseBody);
-
-                        String username = json.optString("username", "N/A");
-                        String fullname = json.optString("fullname", "N/A");
-                        String email = json.optString("email", "N/A");
-
-                        txtUsername.setText("Tài khoản: " + username);
-                        txtFullname.setText("Họ tên: " + fullname);
-                        txtEmail.setText("Email: " + email);
-
-                    } catch (Exception e) {
-                        Log.e(TAG, "JSON error", e);
-                        Toast.makeText(getApplicationContext(),
-                                "Lỗi đọc dữ liệu!",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
+            if (!pass1.isEmpty()) {
+                if (pass1.length() < 6 || !pass1.equals(pass2)) {
+                    Toast.makeText(this, "Mật khẩu không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                obj.put("password", pass1);
             }
-        });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        updateUserInfo(obj.toString());
+    }
+
+    void getUserInfo() {
+        new Thread(() -> {
+            Map<String, String> headers = new HashMap<>();
+            headers.put("token", MainActivity._token);
+
+            ApiClient.ApiResult r = ApiClient.httpPost(ApiClient.URL_USER_INFO, null, headers);
+
+            runOnUiThread(() -> {
+                try {
+                    JSONObject obj = new JSONObject(r.body);
+                    JSONObject m = obj.getJSONObject("m");
+
+                    m_txtFullname.setText("Xin chào: " + m.optString("fullname", "Chưa có"));
+                    m_txtEmail.setText("Email: " + m.optString("email", "Chưa có"));
+
+                } catch (Exception e) {
+                    Toast.makeText(this, "Lỗi tải thông tin", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }).start();
+    }
+
+    void updateUserInfo(String json) {
+        new Thread(() -> {
+            Map<String, String> headers = new HashMap<>();
+            headers.put("token", MainActivity._token);
+
+            ApiClient.ApiResult r = ApiClient.httpPost(ApiClient.URL_USER_UPDATE, json, headers);
+
+            runOnUiThread(() -> {
+                try {
+                    JSONObject obj = new JSONObject(r.body);
+                    int ret = obj.getInt("r");
+                    String msg = obj.getString("m");
+
+                    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+
+                    if (ret > 0) {
+                        getUserInfo();
+                        m_edtNewFullname.setText("");
+                        m_edtNewEmail.setText("");
+                        m_edtPassword1.setText("");
+                        m_edtPassword2.setText("");
+                    }
+
+                } catch (Exception e) {
+                    Toast.makeText(this, "Lỗi cập nhật", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }).start();
     }
 }

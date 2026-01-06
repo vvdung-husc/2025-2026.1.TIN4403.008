@@ -109,4 +109,38 @@
         android:text="Cập nhật thông tin"
         app:layout_constraintStart_toStartOf="@+id/edtPassword2"
         app:layout_constraintTop_toBottomOf="@+id/edtPassword2" />
+
+    <EditText
+        android:id="@+id/editFull"
+        android:layout_width="290dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="56dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="44dp"
+        android:text="Họ và tên"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="35dp"
+        android:text="Cập nhập thông tin "
+        android:textColor="#673AB7"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
