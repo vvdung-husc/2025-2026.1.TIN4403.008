@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class UserActivity extends AppCompatActivity {
     TextView m_txtFullname, m_txtEmail;
-    EditText m_edtNewEmail, m_edtPassword1, m_edtPassword2; //Biến điều khiển EditText**
+    EditText m_edtNewEmail, m_edtPassword1, m_edtPassword2, m_edtNewFullname; //Biến điều khiển EditText**
     Button m_btnLogout, m_btnUpdate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,7 @@ public class UserActivity extends AppCompatActivity {
         m_txtEmail= (TextView)findViewById(R.id.txtEmail);
         m_btnLogout = (Button) findViewById(R.id.btnLogout);
 
+        m_edtNewFullname = findViewById(R.id.edtNewFullname);
         m_edtNewEmail = (EditText) findViewById(R.id.edtNewEmail);
         m_edtPassword1 = (EditText) findViewById(R.id.edtPassword1);
         m_edtPassword2 = (EditText) findViewById(R.id.edtPassword2);
@@ -59,9 +60,15 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //kiểm tra thông tin email mới;
+                String fullname = m_edtNewFullname.getText().toString().trim();
                 String email = m_edtNewEmail.getText().toString();// lấy thông tin EMAIL đã nhập
                 String pass = m_edtPassword1.getText().toString();// lấy thông tin mật khẩu đã nhập
                 String pass2 = m_edtPassword2.getText().toString();// lấy thông tin mật khẩu đã nhập
+
+                if (fullname.isEmpty() && email.isEmpty() && pass.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Vui lòng nhập thông tin cần thay đổi", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 if (email.isEmpty() && pass.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Email hoặc Password phải có để cập nhật", Toast.LENGTH_SHORT).show();
@@ -69,6 +76,14 @@ public class UserActivity extends AppCompatActivity {
                 }
 
                 JSONObject obj = new JSONObject();
+
+                if (!fullname.isEmpty()) {
+                    try {
+                        obj.put("fullname", fullname);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
                 if (!email.isEmpty()){
                     if (email.indexOf('@') == -1) {
@@ -175,6 +190,7 @@ public class UserActivity extends AppCompatActivity {
                         getUserInfo(); // Gọi lại hàm này để làm mới tên và email trên màn hình
 
                         //Xóa nội dung trong các ô EditText sau khi cập nhật thành công
+                        m_edtNewFullname.setText("");
                         m_edtNewEmail.setText("");
                         m_edtPassword1.setText("");
                         m_edtPassword2.setText("");

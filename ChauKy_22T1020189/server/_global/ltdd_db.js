@@ -55,8 +55,7 @@ CDBLTDD.prototype.modifyUser = async function (user, modify){
 // hàm đăng ký người dùng
 // --- SỬA TRONG FILE ltdd_db.js ---
 
-// Xóa tất cả các hàm Register cũ đi và dán đoạn này vào:
-CDBLTDD.prototype.Register = async function (user, pass, email) {
+CDBLTDD.prototype.Register = async function (user, pass, email, fullname) {
     try {
         // 1. Kiểm tra xem username đã tồn tại chưa (Rất quan trọng)
         const existingUser = await this.db_.collection("svdb").findOne({ username: user });
@@ -70,7 +69,7 @@ CDBLTDD.prototype.Register = async function (user, pass, email) {
             username: user,
             password: pass,
             email: email,
-            fullname: "", // Mặc định trống để user cập nhật sau
+            fullname: fullname,  
             created_at: new Date()
         });
         
@@ -79,19 +78,5 @@ CDBLTDD.prototype.Register = async function (user, pass, email) {
     } catch (error) {
         console.error("Lỗi Register DB:", error);
         return false;
-    }
-}
-CDBLTDD.prototype.Register = async function(user, pass, email) {
-    try {
-        const result = await this.db_.collection("svdb").insertOne({
-            username: user,
-            password: pass,
-            email: email,
-            fullname: "" // Khởi tạo trống
-        });
-        return result.insertedId;
-    } catch (e) {
-        console.error(e);
-        return null;
     }
 }

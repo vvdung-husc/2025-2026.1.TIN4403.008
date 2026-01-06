@@ -14,17 +14,17 @@ public class APIClient {
 
     //CHỈ SỬ DỤNG 1 TRONG 2
     //ĐÂY LÀ ĐỊNH NGHĨA URL CÁC API CHO APP QUAN INTERNET BẰNG DOMAIN dev.husc.edu.vn
-    public static final String URL_LOGIN = "https://dev.husc.edu.vn/tin4403/api/login";
-    public static final String URL_USER_INFO = "https://dev.husc.edu.vn/tin4403/api/userinfo";
-    public static final String URL_USER_UPDATE = "https://dev.husc.edu.vn/tin4403/api/userupdate";
-    public static final String URL_USER_REGISTER = "https://dev.husc.edu.vn/tin4403/api/register";
+//    public static final String URL_LOGIN = "https://dev.husc.edu.vn/tin4403/api/login";
+//    public static final String URL_USER_INFO = "https://dev.husc.edu.vn/tin4403/api/userinfo";
+//    public static final String URL_USER_UPDATE = "https://dev.husc.edu.vn/tin4403/api/userupdate";
+//    public static final String URL_USER_REGISTER = "https://dev.husc.edu.vn/tin4403/api/register";
 
     // ĐÂY LÀ ĐỊNH NGHĨA URL CÁC API CHO APP DÙNG MẠNG NỘI BỘ - THAY ĐỊA CHỈ IP VÀ PORT ĐÚNG VỚI DỊCH VỤ ĐANG CHẠY
 
-//    public static final String URL_LOGIN = "http://192.168.56.1:4380/login";
-//    public static final String URL_USER_INFO = "http://192.168.56.1:4380/userinfo";
-//    public static final String URL_USER_UPDATE = "http://192.168.56.1:4380/userupdate";
-//    public static final String URL_USER_REGISTER = "http://192.168.56.1:4380/register";
+    public static final String URL_LOGIN = "http://192.168.1.10:4380/login";
+    public static final String URL_USER_INFO = "http://192.168.1.10:4380/userinfo";
+    public static final String URL_USER_UPDATE = "http://192.168.1.10:4380/userupdate";
+    public static final String URL_USER_REGISTER = "http://192.168.1.10:4380/register";
 
     private static final OkHttpClient client = new OkHttpClient();
 

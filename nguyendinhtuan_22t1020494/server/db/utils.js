@@ -14,5 +14,5 @@ CUtils.prototype.apiResult = function(code, msg, res){
   else oResult["m"] = msg;
 
   var status = oResult["r"] > 0 ? 200 : 503;
-  res.status(status).json(oResult);
+  res.status(200).json(oResult);
 }
