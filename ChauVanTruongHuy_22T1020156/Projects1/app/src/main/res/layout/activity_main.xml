@@ -12,29 +12,30 @@
         android:id="@+id/loginForm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginTop="50dp"
         android:gravity="center_horizontal"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/btnRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45">
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:text="ĐĂNG NHẬP"
-            android:textColor="#2E7D32"
+            android:text="SINH VIÊN"
+            android:textColor="#037BF4"
             android:textSize="28sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="Tài khoản"
-            android:textColor="#4CAF50"
+            android:text=" Tài khoản"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <EditText
@@ -50,8 +51,8 @@
         <TextView
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="Mật khẩu"
-            android:textColor="#4CAF50"
+            android:text=" Mật khẩu"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <EditText
@@ -66,9 +67,9 @@
 
         <Button
             android:id="@+id/btnLogin"
-            android:layout_width="300dp"
-            android:layout_height="55dp"
-            android:backgroundTint="#4CAF50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#037BF4"
             android:text="Đăng nhập"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
@@ -80,15 +81,26 @@
         android:id="@+id/btnRegister"
         android:layout_width="300dp"
         android:layout_height="55dp"
-        android:layout_marginBottom="40dp"
-        android:backgroundTint="#FFFFFF"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#037BF4"
         android:text="Tạo tài khoản mới"
-        android:textColor="#2E7D32"
+        android:textColor="@color/white"
         app:cornerRadius="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:strokeColor="#2E7D32"
         app:strokeWidth="2dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Quên mật khẩu"
+        android:textColor="#037BF4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginForm" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

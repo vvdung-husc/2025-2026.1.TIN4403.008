@@ -62,7 +62,7 @@ app.post("/register", async function (req, res) {
     // 2. Kiểm tra tài khoản tồn tại chưa
     const check = await DB.getUser(user);
     if (check) {
-        return UTILS.apiResult(0, "Tài khoản này đã có người sử dụng", res);
+        return UTILS.apiResult(0, "Tài khoản này đã tôn tại", res);
     }
 
     // 3. Gọi DB để lưu (Hàm DB.Register phải có trong ltdd_db.js)
@@ -226,7 +226,7 @@ function decodeToken(token) {
   var curSeconds = ~~(Date.now() / 1000);
   if (curSeconds - user_.t > (60 * 5)) { //5phut
     oResult['error'] = -3;
-    oResult['message'] = "Hết thời gian, yêu cầu đăng nhập lại để lấy token";
+    oResult['message'] = "Hết thời gian đăng nhập, đăng nhập lại để lấy token";
     return oResult;
   }
 

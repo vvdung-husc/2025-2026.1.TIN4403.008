@@ -1,6 +1,6 @@
 var express = require('express');
 var routes = require("./routes.js");
-var DB = require("./_global/ltdd_db")
+var DB = require("./_global/ltdd_db.js")
 var app = express();
 
 app.use(express.json());
