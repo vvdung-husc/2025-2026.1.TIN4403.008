@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -30,6 +31,18 @@ public class MainActivity extends AppCompatActivity {
     static String _token; //token nhận được khi login thành công
     EditText m_edtUser, m_edtPass; //Biến điều khiển EditText**
     Button m_btnLogin, m_btnRegister; //Biến điều khiển Button
+    public void toggleDarkMode(View view) {
+        // Kiểm tra xem hiện tại đang là chế độ nào
+        int mode = AppCompatDelegate.getDefaultNightMode();
+
+        if (mode == AppCompatDelegate.MODE_NIGHT_YES) {
+            // Nếu đang là Dark Mode thì chuyển sang Light Mode
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else {
+            // Nếu đang là Light Mode thì chuyển sang Dark Mode
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
