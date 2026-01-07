@@ -21,10 +21,10 @@ public class ApiClient {
 
     // ĐÂY LÀ ĐỊNH NGHĨA URL CÁC API CHO APP DÙNG MẠNG NỘI BỘ - THAY ĐỊA CHỈ IP VÀ PORT ĐÚNG VỚI DỊCH VỤ ĐANG CHẠY
 
-    public static final String URL_LOGIN = "http://192.168.56.1:4380/login";
-    public static final String URL_USER_INFO = "http://192.168.56.1:4380/userinfo";
-    public static final String URL_USER_UPDATE = "http://192.168.56.1:4380/userupdate";
-    public static final String URL_USER_REGISTER = "http://192.168.56.1:4380/register";
+    public static final String URL_LOGIN = "http://10.11.1.100:4380/login";
+    public static final String URL_USER_INFO = "http://10.11.1.100:4380/userinfo";
+    public static final String URL_USER_UPDATE = "http://10.11.1.100:4380/userupdate";
+    public static final String URL_USER_REGISTER = "http://10.11.1.100:4380/register";
 
     private static final OkHttpClient client = new OkHttpClient();
 
@@ -82,9 +82,20 @@ public class ApiClient {
                 .post(requestBody);
 
 
+        //if (headers != null) {
+        //for (Map.Entry<String, String> h : headers.entrySet()) {
+        //  builder.addHeader(h.getKey(), h.getValue());
+        //}
+        //}
         if (headers != null) {
             for (Map.Entry<String, String> h : headers.entrySet()) {
-                builder.addHeader(h.getKey(), h.getValue());
+                // Kiểm tra: Chỉ thêm nếu cả Key và Value đều không bị null
+                if (h.getKey() != null && h.getValue() != null) {
+                    builder.addHeader(h.getKey(), h.getValue());
+                } else {
+                    // Log ra để bạn biết cái nào đang bị trống
+                    Log.e("API_CLIENT", "Phát hiện Header bị null: " + h.getKey() + " = " + h.getValue());
+                }
             }
         }
 

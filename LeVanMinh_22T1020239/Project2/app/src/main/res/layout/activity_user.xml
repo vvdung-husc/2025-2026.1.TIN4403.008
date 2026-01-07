@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="30dp"
+        tools:context=".UserActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp">
+
+            <TextView
+                android:id="@+id/txtFullname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Xin chào: User"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/txtEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email: example@gmail.com"
+                android:textColor="@color/black"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            android:layout_marginBottom="30dp"
+            android:backgroundTint="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cập nhật thông tin cá nhân"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="20dp"/>
+
+                <TextView
+                    android:id="@+id/txtNewFullname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Họ và tên mới"
+                    android:textStyle="bold"
+                    android:textColor="@color/black" />
+
+                <EditText
+                    android:id="@+id/edtNewFullname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập họ và tên"
+                    android:inputType="textPersonName"
+                    android:paddingBottom="10dp"
+                    android:backgroundTint="@color/black"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:layout_marginBottom="15dp" />
+
+                <TextView
+                    android:id="@+id/txtNewEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email mới"
+                    android:textStyle="bold"
+                    android:textColor="@color/black" />
+
+                <EditText
+                    android:id="@+id/edtNewEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập email"
+                    android:inputType="textEmailAddress"
+                    android:paddingBottom="10dp"
+                    android:backgroundTint="@color/black"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:layout_marginBottom="15dp" />
+
+                <TextView
+                    android:id="@+id/txtNewPassword1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mật khẩu mới"
+                    android:textStyle="bold"
+                    android:textColor="@color/black" />
+
+                <EditText
+                    android:id="@+id/edtPassword1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập mật khẩu"
+                    android:inputType="textPassword"
+                    android:paddingBottom="10dp"
+                    android:backgroundTint="@color/black"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:layout_marginBottom="15dp" />
+
+                <TextView
+                    android:id="@+id/txtNewPassword2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nhập lại mật khẩu"
+                    android:textStyle="bold"
+                    android:textColor="@color/black" />
+
+                <EditText
+                    android:id="@+id/edtPassword2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Xác nhận mật khẩu"
+                    android:inputType="textPassword"
+                    android:paddingBottom="10dp"
+                    android:backgroundTint="@color/black"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btnUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:text="Cập nhật thông tin"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/black"
+            android:textSize="16sp"
+            android:paddingVertical="12dp"
+            app:cornerRadius="8dp" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Đăng xuất"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/white"
+            android:textSize="16sp"
+            android:paddingVertical="12dp"
+            app:cornerRadius="8dp"
+            app:strokeColor="@color/black"
+            app:strokeWidth="1dp" />
+
+    </LinearLayout>
+</ScrollView>
