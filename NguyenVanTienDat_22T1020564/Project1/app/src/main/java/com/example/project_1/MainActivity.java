@@ -1,4 +1,5 @@
 package com.example.project_1;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {//Hàm sử lý sự kiện click button register
             //Toast.makeText(getApplicationContext(),"::onClick...",Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+            Intent i = new Intent(getApplicationContext(), com.example.project_1.RegisterActivity.class);
             startActivity(i);
         }
     }

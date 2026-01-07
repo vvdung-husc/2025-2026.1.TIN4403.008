@@ -45,7 +45,7 @@ var appRouter = function (app) {
   var fullname = req.body.fullname;
   var email = req.body.email;
 
-  // Validate
+  // Validate bắt buộc
   if (!username || username.length < 3) {
     UTILS.apiResult(-1, "Tên tài khoản không hợp lệ", res);
     return;
@@ -56,12 +56,13 @@ var appRouter = function (app) {
     return;
   }
 
-  if (!email || email.indexOf("@") === -1) {
+  // Email nếu có thì mới validate
+  if (email && email.indexOf("@") === -1) {
     UTILS.apiResult(-3, "Email không hợp lệ", res);
     return;
   }
 
-  // Check trùng user
+  // Check trùng username
   if (await DB.getUser(username)) {
     UTILS.apiResult(-4, "Tài khoản đã tồn tại", res);
     return;
@@ -71,14 +72,13 @@ var appRouter = function (app) {
     username: username,
     password: password,
     fullname: fullname ? fullname : "",
-    email: email
+    email: email ? email : ""
   };
 
   await DB.createUser(user);
 
   UTILS.apiResult(1, "Đăng ký tài khoản thành công", res);
 });
-
 
   app.post("/userupdate", function (req, res) {
     var token = req.headers.token;

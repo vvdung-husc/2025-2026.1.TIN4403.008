@@ -32,23 +32,51 @@ CDBLTDD.prototype.Init = async function () {
 }
 
 CDBLTDD.prototype.getUser = async function(user){
-  const u = await this.db_.collection("users").findOne({username:user});
+  const u = await this.db_.collection("students").findOne({username:user});
   return u;   // trả về user hoặc null
 }
-
-CDBLTDD.prototype.getUsers = async function(){//không trả về _id
-  const users = await this.db_.collection("users").find({}, { projection: { _id: 0 } }).toArray();
+ 
+CDBLTDD.prototype.getUsers = async function(){ // lấy tất cả danh sách, không trả về _id
+  const users = await this.db_.collection("students").find({}, { projection: { _id: 0 } }).toArray();
   return users;   // trả về mảng users
 }
 
 CDBLTDD.prototype.Authentication = async function(user, pass){
-  const u = await this.db_.collection("users").findOne({ username: user, password: pass});
+  const u = await this.db_.collection("students").findOne({ username: user, password: pass});
   return u;   // trả về user hoặc null
 }
 
 CDBLTDD.prototype.modifyUser = async function (user, modify){
     //console.log(modify);
-    const oDoc = await this.db_.collection("users").updateOne({username:user},{$set:modify});
+    const oDoc = await this.db_.collection("students").updateOne({username:user},{$set:modify}); // cập nhật thông tin người dùng
     //console.log(oDoc);
     return oDoc;
 } 
+// hàm đăng ký người dùng
+// --- SỬA TRONG FILE db_js.js ---
+
+CDBLTDD.prototype.Register = async function (user, pass, email, fullname) {
+    try {
+        // 1. Kiểm tra xem username đã tồn tại chưa (Rất quan trọng)
+        const existingUser = await this.db_.collection("students").findOne({ username: user });
+        if (existingUser) {
+            console.log("--> Đăng ký thất bại: Tài khoản đã tồn tại");
+            return false; 
+        }
+
+        // 2. Nếu chưa có thì mới chèn vào MongoDB
+        const result = await this.db_.collection("students").insertOne({
+            username: user,
+            password: pass,
+            email: email,
+            fullname: fullname,  
+            created_at: new Date()
+        });
+        
+        // Trả về true nếu Insert thành công
+        return result.acknowledged; 
+    } catch (error) {
+        console.error("Lỗi Register DB:", error);
+        return false;
+    }
+}
