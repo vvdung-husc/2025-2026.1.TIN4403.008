@@ -1,149 +1,123 @@
 package com.example.project1;
 
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText m_edtUsername;
-    private EditText m_edtPassword;
-    private EditText m_edtConfirmPassword;
-    private EditText m_edtFullname;
-    private EditText m_edtEmail;
-    private Button m_btnConfirm;
-    private Button m_btnBack;
-
-    // Pattern đơn giản để kiểm tra định dạng email
-    private static final Pattern EMAIL_ADDRESS =
-            Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-                    "\\@" +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                    "(" +
-                    "\\." +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                    ")+");
+    EditText edtFullName, edtEmail, edtUsername, edtPassword, edtRePassword;
+    Button btnRegister;
+    TextView tvBackToLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
 
-        // Ánh xạ ID - Đã được chuẩn hóa
-        m_edtUsername = findViewById(R.id.edtRegUsername);
-        m_edtPassword = findViewById(R.id.edtRegPassword);
-        m_edtConfirmPassword = findViewById(R.id.edtRegConfirmPassword);
-        m_edtFullname = findViewById(R.id.edtRegFullname);
-        m_edtEmail = findViewById(R.id.edtRegEmail);
-        m_btnConfirm = findViewById(R.id.btnRegConfirm);
-        m_btnBack = findViewById(R.id.btnRegBack);
+        // ====== MAP ID ĐÚNG VỚI XML ======
+        edtFullName = findViewById(R.id.edtFullName);
+        edtEmail = findViewById(R.id.edtEmail);
+        edtUsername = findViewById(R.id.edtUsername);
+        edtPassword = findViewById(R.id.edtPassword);
+        edtRePassword = findViewById(R.id.edtRePassword);
 
-        m_btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new RegisterTask().execute();
-            }
+        btnRegister = findViewById(R.id.btnRegister);
+        tvBackToLogin = findViewById(R.id.tvBackToLogin);
+
+        tvBackToLogin.setOnClickListener(v -> {
+            startActivity(new Intent(this, com.example.project1.MainActivity.class));
+            finish();
         });
 
-        m_btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        btnRegister.setOnClickListener(v -> register());
+
+        // ⚠️ đổi main → registerLayout
+        ViewCompat.setOnApplyWindowInsetsListener(
+                findViewById(R.id.registerLayout),
+                (v, insets) -> {
+                    Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                    v.setPadding(systemBars.left, systemBars.top,
+                            systemBars.right, systemBars.bottom);
+                    return insets;
+                }
+        );
     }
 
-    private boolean isDataValid(String username, String password, String confirmPassword, String fullname, String email) {
-        if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || fullname.isEmpty() || email.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ tất cả các trường.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (!password.equals(confirmPassword)) {
-            Toast.makeText(this, "Mật khẩu xác nhận không khớp.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (!EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Định dạng Email không hợp lệ.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
-    }
+    void register() {
+        String fullname = edtFullName.getText().toString().trim();
+        String email = edtEmail.getText().toString().trim();
+        String username = edtUsername.getText().toString().trim();
+        String pass1 = edtPassword.getText().toString();
+        String pass2 = edtRePassword.getText().toString();
 
-    private class RegisterTask extends AsyncTask<Void, Void, ApiClient.ApiResult> {
-
-        private String username, password, fullname, email;
-
-        @Override
-        protected void onPreExecute() {
-            username = m_edtUsername.getText().toString().trim();
-            password = m_edtPassword.getText().toString().trim();
-            String confirmPassword = m_edtConfirmPassword.getText().toString().trim();
-            fullname = m_edtFullname.getText().toString().trim();
-            email = m_edtEmail.getText().toString().trim();
-
-            if (!isDataValid(username, password, confirmPassword, fullname, email)) {
-                cancel(true);
-            }
+        // ===== VALIDATE =====
+        if (username.length() < 3) {
+            toast("Tên đăng nhập phải ≥ 3 ký tự");
+            return;
         }
 
-        @Override
-        protected ApiClient.ApiResult doInBackground(Void... voids) {
-            if (isCancelled()) {
-                return null;
-            }
-
-            try {
-                JSONObject jsonPayload = new JSONObject();
-                jsonPayload.put("username", username);
-                jsonPayload.put("password", password);
-                jsonPayload.put("fullname", fullname);
-                jsonPayload.put("email", email);
-
-                return ApiClient.httpPost(ApiClient.URL_USER_REGISTER, jsonPayload.toString(), null);
-
-            } catch (JSONException e) {
-                return new ApiClient.ApiResult(false, "Lỗi tạo dữ liệu JSON: " + e.getMessage(), 0);
-            }
+        if (pass1.length() < 6) {
+            toast("Mật khẩu phải ≥ 6 ký tự");
+            return;
         }
 
-        @Override
-        protected void onPostExecute(ApiClient.ApiResult result) {
-            if (result == null) return;
+        if (!pass1.equals(pass2)) {
+            toast("Mật khẩu nhập lại không khớp");
+            return;
+        }
 
-            if (result.success && result.httpCode == 200) {
-                try {
-                    JSONObject jsonResponse = new JSONObject(result.body);
-                    String status = jsonResponse.optString("status");
-                    String msg = jsonResponse.optString("msg", "Đăng ký thành công!");
+        if (!email.isEmpty() && !email.contains("@")) {
+            toast("Email không hợp lệ");
+            return;
+        }
 
-                    Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_LONG).show();
+        try {
+            JSONObject json = new JSONObject();
+            json.put("username", username);
+            json.put("password", pass1);
+            json.put("fullname", fullname);
+            json.put("email", email);
 
-                    if ("success".equals(status)) {
-                        finish();
+            new Thread(() -> {
+                com.example.project1.ApiClient.ApiResult r =
+                        com.example.project1.ApiClient.httpPost(
+                                com.example.project1.ApiClient.URL_USER_REGISTER,
+                                json.toString(),
+                                null
+                        );
+
+                runOnUiThread(() -> {
+                    if (r.success) {
+                        Utils.showAlert(
+                                RegisterActivity.this,
+                                "Thành công",
+                                "Đăng ký tài khoản thành công!"
+                        );
+                    } else {
+                        toast("Lỗi: " + r.body);
                     }
-                } catch (JSONException e) {
-                    Toast.makeText(RegisterActivity.this, "Lỗi phân tích phản hồi server.", Toast.LENGTH_LONG).show();
-                }
+                });
+            }).start();
 
-            } else {
-                String errorMessage = "Đăng ký thất bại. Code: " + result.httpCode;
-                if (result.body != null && !result.body.isEmpty()) {
-                    try {
-                        JSONObject jsonError = new JSONObject(result.body);
-                        errorMessage = jsonError.optString("msg", errorMessage);
-                    } catch (JSONException ignored) {}
-                }
-                Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-            }
+        } catch (Exception e) {
+            toast("Lỗi xử lý dữ liệu");
         }
+    }
+
+    void toast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }
