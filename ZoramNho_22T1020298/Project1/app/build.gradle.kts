@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-
+    implementation("com.squareup.okhttp3:okhttp:5.2.1")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
