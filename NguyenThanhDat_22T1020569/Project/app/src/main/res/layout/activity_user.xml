@@ -12,7 +12,7 @@
         android:id="@+id/viewHeader"
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        android:background="#4CAF50"
+        android:background="#009688"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="24dp"
-        android:text="Chào mừng: Fullname"
+        android:text="Welcome: Fullname"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -61,17 +61,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CẬP NHẬT THÔNG TIN"
-                android:textColor="#2E7D32"
-                android:textStyle="bold"
+                android:layout_gravity="center"
                 android:layout_marginBottom="16dp"
-                android:layout_gravity="center"/>
+                android:text="UPDATE INFORMATION"
+                android:textColor="#009688"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Địa chỉ Email mới"
-                android:textColor="#4CAF50"
+                android:text="New Email address"
+                android:textColor="#009688"
                 android:textStyle="bold" />
 
             <EditText
@@ -87,8 +87,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mật khẩu mới"
-                android:textColor="#4CAF50"
+                android:text="New Password"
+                android:textColor="#009688"
                 android:textStyle="bold" />
 
             <EditText
@@ -104,8 +104,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Xác nhận mật khẩu"
-                android:textColor="#4CAF50"
+                android:text="Confirm New Pasword"
+                android:textColor="#009688"
                 android:textStyle="bold" />
 
             <EditText
@@ -122,8 +122,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginTop="24dp"
-                android:backgroundTint="#4CAF50"
-                android:text="Cập nhật ngay"
+                android:backgroundTint="#009688"
+                android:text="Update Now"
                 android:textColor="#FFFFFF"
                 app:cornerRadius="8dp" />
 
@@ -136,13 +136,13 @@
         android:layout_height="50dp"
         android:layout_marginBottom="32dp"
         android:backgroundTint="#FFFFFF"
-        android:text="Thoát tài khoản"
-        android:textColor="#D32F2F"
-        app:strokeColor="#D32F2F"
-        app:strokeWidth="1dp"
+        android:text="Log Out"
+        android:textColor="#009688"
         app:cornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="#009688"
+        app:strokeWidth="1dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

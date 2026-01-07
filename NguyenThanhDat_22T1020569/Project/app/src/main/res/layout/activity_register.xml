@@ -25,16 +25,16 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             android:gravity="center"
-            android:text="TẠO TÀI KHOẢN"
-            android:textColor="#2E7D32"
+            android:text="REGISTER"
+            android:textColor="#009688"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tên tài khoản"
-            android:textColor="#4CAF50"
+            android:text="UserName"
+            android:textColor="#009688"
             android:textStyle="bold" />
 
         <EditText
@@ -50,8 +50,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Họ và tên"
-            android:textColor="#4CAF50"
+            android:text="FullName"
+            android:textColor="#009688"
             android:textStyle="bold" />
 
         <EditText
@@ -67,8 +67,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mật khẩu"
-            android:textColor="#4CAF50"
+            android:text="Password"
+            android:textColor="#009688"
             android:textStyle="bold" />
 
         <EditText
@@ -84,8 +84,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Xác nhận mật khẩu"
-            android:textColor="#4CAF50"
+            android:text="Confirm Password"
+            android:textColor="#009688"
             android:textStyle="bold" />
 
         <EditText
@@ -102,8 +102,8 @@
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:backgroundTint="#4CAF50"
-            android:text="ĐĂNG KÝ NGAY"
+            android:backgroundTint="#009688"
+            android:text="Register"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -115,8 +115,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:gravity="center"
-            android:text="Đã có tài khoản? Đăng nhập ngay"
-            android:textColor="#2E7D32"
+            android:text="Alredy have an Account? Log in now."
+            android:textColor="#009688"
             android:textSize="14sp"
             android:textStyle="bold" />
 
