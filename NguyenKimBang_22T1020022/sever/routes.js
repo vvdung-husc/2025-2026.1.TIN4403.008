@@ -1,3 +1,4 @@
+
 const Buffer = require('buffer/').Buffer;
 const DB = require("./_global/ltdd_db.js")
 const UTILS = require('./_global/utils.js');
@@ -11,17 +12,31 @@ var appRouter = function (app) {
   app.get("/users", async function (req, res) {
     const u = await DB.getUsers();
     UTILS.apiResult(1, JSON.stringify(u), res);
+    //res.status(200).json(u);
+    //res.status(200).send("RESTFUL API (/users)- NODEJS - TINK46");
   });
 
   app.post("/userinfo", function (req, res) {
     var token = req.headers.token;
     POST_userInfo(token, res);
+    //res.status(200).send("USERINFO API");
   });
 
   app.post("/login", async function (req, res) {
     var user = req.body.username;
     var pass = req.body.password;
     POST_login(user, pass, res);
+    // const u = await DB.Authentication(user,pass);
+    // if (u){//ĐĂNG NHẬP THÀNH CÔNG
+    //   res.status(200).json(u);
+    // }
+    // else{//ĐĂNG NHẬP LỖI
+    //   res.status(302).send("FAILED - LOGIN API [" + user + "/" + pass +"]");
+    // }
+    // if (user == "vvdung" && pass == '111222')
+    // 	res.status(200).send("ĐĂNG NHẬP THANH CONG [" + user + "/" + pass +"]");
+    // else		
+    // 	res.status(200).send("FAILED - LOGIN API [" + user + "/" + pass +"]");
   });
 
 app.post("/register", async function (req, res) {
@@ -36,6 +51,7 @@ app.post("/register", async function (req, res) {
     await POST_register(user, pass, email, fullname, res);
 });
   async function POST_register(user, pass, email, fullname, res) {
+    // 1. Kiểm tra dữ liệu đầu vào (Validation)
     if (!user || user.length < 3) {
         return UTILS.apiResult(0, "Tài khoản phải từ 3 ký tự", res);
     }
@@ -43,14 +59,17 @@ app.post("/register", async function (req, res) {
         return UTILS.apiResult(0, "Mật khẩu phải từ 6 ký tự", res);
     }
 
+    // 2. Kiểm tra tài khoản tồn tại chưa
     const check = await DB.getUser(user);
     if (check) {
-        return UTILS.apiResult(0, "Tài khoản này đã tôn tại", res);
+        return UTILS.apiResult(0, "Tài khoản này đã có người sử dụng", res);
     }
 
+    // 3. Gọi DB để lưu (Hàm DB.Register phải có trong ltdd_db.js)
     const result = await DB.Register(user, pass, email, fullname); 
 
     if (result) {
+        // Trả về mã 1 (Success) để RegisterActivity.java nhảy vào thông báo thành công
         UTILS.apiResult(1, "Đăng ký thành công!", res);
     } else {
         UTILS.apiResult(0, "Lỗi khi lưu vào cơ sở dữ liệu", res);
@@ -67,6 +86,7 @@ app.post("/register", async function (req, res) {
       fullname: name ? name.toString() : null,
       email: email ? email.toString() : null
     }
+    //console.log(info);
     POST_userUpdate(token, info, res);
   });
 }
@@ -74,6 +94,7 @@ app.post("/register", async function (req, res) {
 module.exports = appRouter;
 
 async function POST_login(user, pass, res) {
+// 1. Kiểm tra định dạng đầu vào
   if (user == undefined || !user || user.length < 3) {
     return UTILS.apiResult(-1, "Tài khoản không hợp lệ", res);
   }
@@ -81,9 +102,11 @@ async function POST_login(user, pass, res) {
     return UTILS.apiResult(-2, "Mật khẩu không hợp lệ", res);
   }
 
+  // 2. Xác thực tài khoản từ Database
   const u = await DB.Authentication(user, pass);
   if (!u) {
-
+    // Khi sai mật khẩu, trả về lỗi -3. 
+    // App Android sẽ dựa vào số -3 này để hiện Toast mà không bị văng.
     return UTILS.apiResult(-3, "Thông tin tài khoản không chính xác", res);
   }
 
@@ -93,8 +116,12 @@ async function POST_login(user, pass, res) {
   user_["t"] = ~~(Date.now() / 1000);
   var token = Buffer.from(JSON.stringify(user_), 'utf8').toString('base64');
 
+  // 4. KIỂM TRA TRẠNG THÁI CẬP NHẬT
+  // Nếu user đã có fullname và không phải chuỗi rỗng thì coi như đã cập nhật
   var isUpdated = (u.fullname && u.fullname.trim() !== "") ? true : false;
 
+  // 5. Trả về kết quả kèm theo biến updated
+  // Thay vì chỉ trả về mỗi token, ta trả về một Object chứa cả token và updated
   res.json({
     r: 1,
     m: token,
@@ -120,6 +147,7 @@ async function POST_userInfo(token, res) {
   UTILS.apiResult(1, u, res);
 }
 async function POST_userUpdate(token, info, res) {
+  //console.log("userUpdate TOKEN: [",token,"]");
 
   var oResult = decodeToken(token);
   if (oResult.error != 1) {
@@ -163,6 +191,7 @@ async function POST_userUpdate(token, info, res) {
   UTILS.apiResult(1, "[" + oToken.u + "] Cập nhật thành công", res);
 }
 
+//Hàm giải mã token đã được mã hóa từ hàm POST_login khi đăng nhập thành công
 function decodeToken(token) {
   var oResult = {};
   if (token == undefined || !token) {
@@ -171,6 +200,7 @@ function decodeToken(token) {
     return oResult;
   }
 
+  //Chuyển token từ Base64 => Object - có dạng như ở phần login thành công
   var user_;
   try {
     var plain = Buffer.from(token, 'base64').toString('utf8');
@@ -192,10 +222,11 @@ function decodeToken(token) {
     return oResult;
   }
 
+  //kiểm tra thời gian đã logined, tính theo seconds
   var curSeconds = ~~(Date.now() / 1000);
-  if (curSeconds - user_.t > (60 * 5)) {
+  if (curSeconds - user_.t > (60 * 5)) { //5phut
     oResult['error'] = -3;
-    oResult['message'] = "Hết thời gian đăng nhập, đăng nhập lại để lấy token";
+    oResult['message'] = "Hết thời gian, yêu cầu đăng nhập lại để lấy token";
     return oResult;
   }
 

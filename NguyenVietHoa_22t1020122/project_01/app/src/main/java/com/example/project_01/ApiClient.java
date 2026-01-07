@@ -7,10 +7,7 @@ import java.util.Map;
 
 //Định nghĩa lớp API để nhận thông tin từ server
 public class ApiClient {
-    /**
-     * xem tất cả các tài khoản đang có trong hệ thống từ trình duyệt
-     * https://dev.husc.edu.vn/tin4403/api/users
-    **/
+
 
     //CHỈ SỬ DỤNG 1 TRONG 2
     //ĐÂY LÀ ĐỊNH NGHĨA URL CÁC API CHO APP QUAN INTERNET BẰNG DOMAIN dev.husc.edu.vn
@@ -21,10 +18,10 @@ public class ApiClient {
 
     // ĐÂY LÀ ĐỊNH NGHĨA URL CÁC API CHO APP DÙNG MẠNG NỘI BỘ - THAY ĐỊA CHỈ IP VÀ PORT ĐÚNG VỚI DỊCH VỤ ĐANG CHẠY
 
-    public static final String URL_LOGIN = "http://192.168.1.19:4380/login";
-    public static final String URL_USER_INFO = "http://192.168.1.19:4380/userinfo";
-    public static final String URL_USER_UPDATE = "http://192.168.1.19:4380/userupdate";
-    public static final String URL_USER_REGISTER = "http://192.168.1.19:4380/register";
+    public static final String URL_LOGIN = "http://192.168.1.37:4380/login";
+    public static final String URL_USER_INFO = "http://192.168.1.37:4380/userinfo";
+    public static final String URL_USER_UPDATE = "http://192.168.1.37:4380/userupdate";
+    public static final String URL_USER_REGISTER = "http://192.168.1.37:4380/register";
 
     private static final OkHttpClient client = new OkHttpClient();
 

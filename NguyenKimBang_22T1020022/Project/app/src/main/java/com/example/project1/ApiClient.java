@@ -1,4 +1,4 @@
-package com.example.project_01;
+package com.example.project1;
 import android.util.Log;
 
 import okhttp3.*;
@@ -10,7 +10,7 @@ public class ApiClient {
     /**
      * xem tất cả các tài khoản đang có trong hệ thống từ trình duyệt
      * https://dev.husc.edu.vn/tin4403/api/users
-    **/
+     **/
 
     //CHỈ SỬ DỤNG 1 TRONG 2
     //ĐÂY LÀ ĐỊNH NGHĨA URL CÁC API CHO APP QUAN INTERNET BẰNG DOMAIN dev.husc.edu.vn
@@ -21,14 +21,14 @@ public class ApiClient {
 
     // ĐÂY LÀ ĐỊNH NGHĨA URL CÁC API CHO APP DÙNG MẠNG NỘI BỘ - THAY ĐỊA CHỈ IP VÀ PORT ĐÚNG VỚI DỊCH VỤ ĐANG CHẠY
 
-    public static final String URL_LOGIN = "http://192.168.1.19:4380/login";
-    public static final String URL_USER_INFO = "http://192.168.1.19:4380/userinfo";
-    public static final String URL_USER_UPDATE = "http://192.168.1.19:4380/userupdate";
-    public static final String URL_USER_REGISTER = "http://192.168.1.19:4380/register";
+    public static final String URL_LOGIN = "http://192.168.1.5:4380/login";
+    public static final String URL_USER_INFO = "http://192.168.1.5:4380/userinfo";
+    public static final String URL_USER_UPDATE = "http://192.168.1.5:4380/userupdate";
+    public static final String URL_USER_REGISTER = "http://192.168.1.5:4380/register";
 
     private static final OkHttpClient client = new OkHttpClient();
 
-    // Class trả về kết quả
+    // Class trả về kết quảs
     public static class ApiResult {
         public boolean success;
         public int  httpCode;
@@ -82,9 +82,20 @@ public class ApiClient {
                 .post(requestBody);
 
 
+        //if (headers != null) {
+        //for (Map.Entry<String, String> h : headers.entrySet()) {
+        //  builder.addHeader(h.getKey(), h.getValue());
+        //}
+        //}
         if (headers != null) {
             for (Map.Entry<String, String> h : headers.entrySet()) {
-                builder.addHeader(h.getKey(), h.getValue());
+                // Kiểm tra: Chỉ thêm nếu cả Key và Value đều không bị null
+                if (h.getKey() != null && h.getValue() != null) {
+                    builder.addHeader(h.getKey(), h.getValue());
+                } else {
+                    // Log ra để bạn biết cái nào đang bị trống
+                    Log.e("API_CLIENT", "Phát hiện Header bị null: " + h.getKey() + " = " + h.getValue());
+                }
             }
         }
 
