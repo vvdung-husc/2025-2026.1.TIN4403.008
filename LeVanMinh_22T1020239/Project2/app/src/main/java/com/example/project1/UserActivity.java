@@ -1,50 +1,45 @@
 package com.example.project1;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.example.project1.ApiClient;
+import com.example.project1.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserActivity extends AppCompatActivity {
 
-    // Khắc phục lỗi 'Field can be converted to a local variable' bằng cách xóa m_tvTitle khỏi đây
-    // private TextView m_tvTitle;
-
-    private TextView m_tvDisplayUsername;
-    private TextView m_tvDisplayFullname;
-    private TextView m_tvDisplayEmail;
-    private EditText m_edtNewEmail;
-    private EditText m_edtPassword1;
-    private EditText m_edtPassword2;
-    private Button m_btnUpdate;
-    private Button m_btnLogout;
-
-    private String currentToken;
+    TextView m_txtFullname, m_txtEmail;
+    EditText m_edtNewFullname, m_edtNewEmail, m_edtPassword1, m_edtPassword2;
+    Button m_btnLogout, m_btnUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user);
 
-        // Ánh xạ ID
-        // m_tvTitle = findViewById(R.id.tvUserTitle); // m_tvTitle chỉ dùng để khai báo
-        m_tvDisplayUsername = findViewById(R.id.tvDisplayUsername);
-        m_tvDisplayFullname = findViewById(R.id.tvDisplayFullname);
-        m_tvDisplayEmail = findViewById(R.id.tvDisplayEmail);
+        m_txtFullname = findViewById(R.id.txtFullname);
+        m_txtEmail = findViewById(R.id.txtEmail);
 
+        m_edtNewFullname = findViewById(R.id.edtNewFullname);
         m_edtNewEmail = findViewById(R.id.edtNewEmail);
         m_edtPassword1 = findViewById(R.id.edtPassword1);
         m_edtPassword2 = findViewById(R.id.edtPassword2);
@@ -52,163 +47,111 @@ public class UserActivity extends AppCompatActivity {
         m_btnUpdate = findViewById(R.id.btnUpdate);
         m_btnLogout = findViewById(R.id.btnLogout);
 
-        // Sửa lỗi logic: Lấy token và kiểm tra ngay. currentToken không được khởi tạo mặc định là null.
-        currentToken = Utils.getAuthToken(this);
-        if (currentToken == null || currentToken.isEmpty()) {
-            Toast.makeText(this, "Phiên đăng nhập đã hết hạn.", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(UserActivity.this, MainActivity.class));
+        getUserInfo();
+
+        m_btnLogout.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), com.example.project1.MainActivity.class));
             finish();
+        });
+
+        m_btnUpdate.setOnClickListener(v -> updateInfo());
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+
+    void updateInfo() {
+        String fullname = m_edtNewFullname.getText().toString().trim();
+        String email = m_edtNewEmail.getText().toString().trim();
+        String pass1 = m_edtPassword1.getText().toString();
+        String pass2 = m_edtPassword2.getText().toString();
+
+        if (fullname.isEmpty() && email.isEmpty() && pass1.isEmpty()) {
+            Toast.makeText(this, "Phải nhập ít nhất 1 thông tin để cập nhật", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Khởi chạy AsyncTask với tham chiếu Activity yếu
-        new GetUserInfoTask(this).execute();
+        JSONObject obj = new JSONObject();
 
-        // Sử dụng Lambda expressions (Sửa lỗi phong cách)
-        m_btnUpdate.setOnClickListener(v -> {
-            String newPassword = m_edtPassword1.getText().toString().trim();
-            String confirmPassword = m_edtPassword2.getText().toString().trim();
+        try {
+            if (!fullname.isEmpty())
+                obj.put("fullname", fullname);
 
-            if (!newPassword.isEmpty() && !newPassword.equals(confirmPassword)) {
-                Toast.makeText(UserActivity.this, "Mật khẩu mới và xác nhận không khớp.", Toast.LENGTH_LONG).show();
-                return;
+            if (!email.isEmpty()) {
+                if (!email.contains("@")) {
+                    Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                obj.put("email", email);
             }
-            new UpdateUserTask(this, currentToken).execute();
-        });
 
-        // Sử dụng Lambda expressions (Sửa lỗi phong cách)
-        m_btnLogout.setOnClickListener(v -> {
-            Utils.clearAuthToken(UserActivity.this);
-            Toast.makeText(UserActivity.this, "Đã đăng xuất.", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(UserActivity.this, MainActivity.class));
-            finish();
-        });
-    }
+            if (!pass1.isEmpty()) {
+                if (pass1.length() < 6 || !pass1.equals(pass2)) {
+                    Toast.makeText(this, "Mật khẩu không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                obj.put("password", pass1);
+            }
 
-    // ====================================================================================
-    // SỬA LỖI MEMORY LEAK: Chuyển AsyncTask thành Static class và sử dụng WeakReference
-    // ====================================================================================
-
-    private static class GetUserInfoTask extends AsyncTask<Void, Void, ApiClient.ApiResult> {
-        // Sử dụng WeakReference để tránh rò rỉ bộ nhớ
-        private WeakReference<UserActivity> activityWeakReference;
-        private String token;
-
-        GetUserInfoTask(UserActivity context) {
-            activityWeakReference = new WeakReference<>(context);
-            this.token = context.currentToken; // Lấy token từ Activity
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        @Override
-        protected ApiClient.ApiResult doInBackground(Void... voids) {
-            if (token == null || token.isEmpty()) {
-                return new ApiClient.ApiResult(false, "Token rỗng.", 0);
-            }
+        updateUserInfo(obj.toString());
+    }
+
+    void getUserInfo() {
+        new Thread(() -> {
             Map<String, String> headers = new HashMap<>();
-            headers.put("Authorization", "Bearer " + token);
+            headers.put("token", com.example.project1.MainActivity._token);
 
-            return ApiClient.httpPost(ApiClient.URL_USER_INFO, null, headers);
-        }
+            ApiClient.ApiResult r = ApiClient.httpPost(ApiClient.URL_USER_INFO, null, headers);
 
-        @Override
-        protected void onPostExecute(ApiClient.ApiResult result) {
-            UserActivity activity = activityWeakReference.get();
-            if (activity == null || activity.isFinishing() || result == null) return;
-
-            if (result.success && result.httpCode == 200) {
+            runOnUiThread(() -> {
                 try {
-                    JSONObject jsonResponse = new JSONObject(result.body);
-                    String status = jsonResponse.optString("status");
+                    JSONObject obj = new JSONObject(r.body);
+                    JSONObject m = obj.getJSONObject("m");
 
-                    if ("success".equals(status)) {
-                        JSONObject data = jsonResponse.optJSONObject("data");
-                        if (data != null) {
-                            String username = data.optString("username", "N/A");
-                            String fullname = data.optString("fullname", "N/A");
-                            String email = data.optString("email", "N/A");
+                    m_txtFullname.setText("Xin chào: " + m.optString("fullname", "Chưa có"));
+                    m_txtEmail.setText("Email: " + m.optString("email", "Chưa có"));
 
-                            activity.m_tvDisplayUsername.setText(username);
-                            activity.m_tvDisplayFullname.setText(fullname);
-                            activity.m_tvDisplayEmail.setText(email);
-                            activity.m_edtNewEmail.setText(email);
-                        }
-                    } else {
-                        String msg = jsonResponse.optString("msg", "Lỗi khi tải thông tin.");
-                        Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    Toast.makeText(activity, "Lỗi phân tích dữ liệu người dùng.", Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(this, "Lỗi tải thông tin", Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                Toast.makeText(activity, "Tải thông tin thất bại. Code: " + result.httpCode, Toast.LENGTH_LONG).show();
-            }
-        }
+            });
+        }).start();
     }
 
-    private static class UpdateUserTask extends AsyncTask<Void, Void, ApiClient.ApiResult> {
+    void updateUserInfo(String json) {
+        new Thread(() -> {
+            Map<String, String> headers = new HashMap<>();
+            headers.put("token", com.example.project1.MainActivity._token);
 
-        private WeakReference<UserActivity> activityWeakReference;
-        private String token;
+            ApiClient.ApiResult r = ApiClient.httpPost(ApiClient.URL_USER_UPDATE, json, headers);
 
-        UpdateUserTask(UserActivity context, String currentToken) {
-            activityWeakReference = new WeakReference<>(context);
-            this.token = currentToken;
-        }
-
-        @Override
-        protected ApiClient.ApiResult doInBackground(Void... voids) {
-            UserActivity activity = activityWeakReference.get();
-            if (activity == null || activity.isFinishing()) return null;
-
-            String newEmail = activity.m_edtNewEmail.getText().toString().trim();
-            String newPassword = activity.m_edtPassword1.getText().toString().trim();
-
-            try {
-                JSONObject jsonPayload = new JSONObject();
-                jsonPayload.put("email", newEmail);
-
-                if (!newPassword.isEmpty()) {
-                    jsonPayload.put("new_password", newPassword);
-                }
-
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Bearer " + token);
-
-                return ApiClient.httpPost(ApiClient.URL_USER_UPDATE, jsonPayload.toString(), headers);
-
-            } catch (JSONException e) {
-                return new ApiClient.ApiResult(false, "Lỗi tạo dữ liệu JSON: " + e.getMessage(), 0);
-            }
-        }
-
-        @Override
-        protected void onPostExecute(ApiClient.ApiResult result) {
-            UserActivity activity = activityWeakReference.get();
-            if (activity == null || activity.isFinishing() || result == null) return;
-
-            // Xóa trường mật khẩu sau khi cập nhật
-            activity.m_edtPassword1.setText("");
-            activity.m_edtPassword2.setText("");
-
-            if (result.success && result.httpCode == 200) {
+            runOnUiThread(() -> {
                 try {
-                    JSONObject jsonResponse = new JSONObject(result.body);
-                    String status = jsonResponse.optString("status");
-                    String msg = jsonResponse.optString("msg", "Cập nhật thành công!");
+                    JSONObject obj = new JSONObject(r.body);
+                    int ret = obj.getInt("r");
+                    String msg = obj.getString("m");
 
-                    Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 
-                    if ("success".equals(status)) {
-                        // Gọi lại AsyncTask để tải lại thông tin người dùng
-                        new GetUserInfoTask(activity).execute();
+                    if (ret > 0) {
+                        getUserInfo();
+                        m_edtNewFullname.setText("");
+                        m_edtNewEmail.setText("");
+                        m_edtPassword1.setText("");
+                        m_edtPassword2.setText("");
                     }
-                } catch (JSONException e) {
-                    Toast.makeText(activity, "Lỗi phân tích phản hồi server.", Toast.LENGTH_LONG).show();
+
+                } catch (Exception e) {
+                    Toast.makeText(this, "Lỗi cập nhật", Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                String errorMessage = "Cập nhật thất bại. Code: " + result.httpCode;
-                Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show();
-            }
-        }
+            });
+        }).start();
     }
 }
