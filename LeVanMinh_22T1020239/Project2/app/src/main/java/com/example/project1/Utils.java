@@ -1,30 +1,30 @@
 package com.example.project1;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
-
 public class Utils {
+    /**
+     * Hiển thị một hộp thoại thông báo (AlertDialog) đơn giản.
+     * Hàm này cần được chạy trên UI Thread.
+     *
+     * @param context Context của Activity hoặc Fragment đang hiển thị.
+     * @param title   Tiêu đề của hộp thoại.
+     * @param message Nội dung thông báo.
+     */
+    public static void showAlert(Context context, String title, String message) {
+        // Kiểm tra xem context có hợp lệ và Activity có đang hoạt động không
+        if (context == null || (context instanceof Activity && ((Activity) context).isFinishing())) {
+            return; // Không hiển thị dialog nếu activity đã bị hủy
+        }
 
-    private static final String PREF_NAME = "MyAppPrefs";
-    private static final String KEY_AUTH_TOKEN = "authToken";
-
-    private static SharedPreferences getPrefs(Context context) {
-        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-    }
-
-    public static void saveAuthToken(Context context, String token) {
-        SharedPreferences.Editor editor = getPrefs(context).edit();
-        editor.putString(KEY_AUTH_TOKEN, token);
-        editor.apply();
-    }
-
-    public static String getAuthToken(Context context) {
-        return getPrefs(context).getString(KEY_AUTH_TOKEN, "");
-    }
-
-    public static void clearAuthToken(Context context) {
-        SharedPreferences.Editor editor = getPrefs(context).edit();
-        editor.remove(KEY_AUTH_TOKEN);
-        editor.apply();
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("Đồng ý", (dialog, which) -> {
+                    dialog.dismiss(); // Đóng hộp thoại khi nhấn nút
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert) // Icon cảnh báo
+                .show();
     }
 }
