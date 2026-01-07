@@ -1,84 +1,97 @@
 package com.example.project_01;
+import android.util.Log;
 
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import org.json.JSONObject;
+import okhttp3.*;
+import java.io.IOException;
+import java.util.Map;
 
-public class RegisterActivity extends AppCompatActivity {
-    TextView m_txtBack;
-    Button m_btnRegister;
-    EditText m_edtUser, m_edtName, m_edtPass1, m_edtPass2;
+//Định nghĩa lớp API để nhận thông tin từ server
+public class ApiClient {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
 
-        // Ánh xạ ID (Giữ nguyên theo yêu cầu của bạn)
-        m_txtBack = findViewById(R.id.textView4);
-        m_btnRegister = findViewById(R.id.btnRegister);
-        m_edtUser = findViewById(R.id.edtUser);
-        m_edtName = findViewById(R.id.edtName);
-        m_edtPass1 = findViewById(R.id.edtPass1);
-        m_edtPass2 = findViewById(R.id.edtPass2);
+    //CHỈ SỬ DỤNG 1 TRONG 2
+    //ĐÂY LÀ ĐỊNH NGHĨA URL CÁC API CHO APP QUAN INTERNET BẰNG DOMAIN dev.husc.edu.vn
+//    public static final String URL_LOGIN = "https://dev.husc.edu.vn/tin4403/api/login";
+//    public static final String URL_USER_INFO = "https://dev.husc.edu.vn/tin4403/api/userinfo";
+//    public static final String URL_USER_UPDATE = "https://dev.husc.edu.vn/tin4403/api/userupdate";
+//    public static final String URL_USER_REGISTER = "https://dev.husc.edu.vn/tin4403/api/register";
 
-        if (m_txtBack != null) m_txtBack.setOnClickListener(v -> finish());
+    // ĐÂY LÀ ĐỊNH NGHĨA URL CÁC API CHO APP DÙNG MẠNG NỘI BỘ - THAY ĐỊA CHỈ IP VÀ PORT ĐÚNG VỚI DỊCH VỤ ĐANG CHẠY
 
-        if (m_btnRegister != null) {
-            m_btnRegister.setOnClickListener(v -> {
-                String user = m_edtUser.getText().toString().trim();
-                String name = m_edtName.getText().toString().trim();
-                String pass1 = m_edtPass1.getText().toString().trim();
-                String pass2 = m_edtPass2.getText().toString().trim();
+    public static final String URL_LOGIN = "http://192.168.1.37:4380/login";
+    public static final String URL_USER_INFO = "http://192.168.1.37:4380/userinfo";
+    public static final String URL_USER_UPDATE = "http://192.168.1.37:4380/userupdate";
+    public static final String URL_USER_REGISTER = "http://192.168.1.37:4380/register";
 
-                if (user.isEmpty() || pass1.length() < 6) {
-                    Utils.showAlert(this, "Thông báo", "Tài khoản không được để trống và mật khẩu >= 6 ký tự!");
-                    return;
-                }
-                if (!pass1.equals(pass2)) {
-                    Utils.showAlert(this, "Thông báo", "Mật khẩu nhập lại không khớp!");
-                    return;
-                }
+    private static final OkHttpClient client = new OkHttpClient();
 
-                // Gọi hàm xử lý
-                execRegister(user, pass1, name);
-            });
+    // Class trả về kết quả
+    public static class ApiResult {
+        public boolean success;
+        public int  httpCode;
+        public String body;
+
+        public ApiResult(boolean success, String body, int code) {
+            this.success = success;
+            this.body = body;
+            this.httpCode = code;
         }
     }
 
-    private void execRegister(String user, String pass, String name) {
-        new Thread(() -> {
-            try {
-                JSONObject jsonBody = new JSONObject();
-                jsonBody.put("username", user);
-                jsonBody.put("password", pass);
-                jsonBody.put("fullname", name);
-                jsonBody.put("email", "");
+    // ==========================
+    // GET
+    // ==========================
+    public static ApiResult httpGet(String url, Map<String, String> headers) {
+        Request.Builder builder = new Request.Builder().url(url);
 
-                // Gọi API với đường dẫn đầy đủ để sửa lỗi "Cannot access"
-                com.example.project_01.ApiClient.ApiResult res = com.example.project_01.ApiClient.httpPost(
-                        com.example.project_01.ApiClient.URL_USER_REGISTER,
-                        jsonBody.toString(),
-                        null
-                );
+        if (headers != null) {
+            for (Map.Entry<String, String> h : headers.entrySet()) {
+                builder.addHeader(h.getKey(), h.getValue());
+            }
+        }
 
-                runOnUiThread(() -> {
-                    if (res != null && res.success) {
-                        try {
-                            JSONObject resObj = new JSONObject(res.body);
-                            Toast.makeText(RegisterActivity.this, resObj.getString("m"), Toast.LENGTH_SHORT).show();
-                            if (resObj.getInt("r") > 0) finish();
-                        } catch (Exception e) { e.printStackTrace(); }
-                    } else {
-                        String msg = (res != null && res.body != null) ? res.body : "Lỗi kết nối máy chủ";
-                        Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } catch (Exception e) { e.printStackTrace(); }
-        }).start();
+        try (Response response = client.newCall(builder.build()).execute()) {
+            String body = response.body() != null ? response.body().string() : "";
+
+            return new ApiResult(response.isSuccessful(), body, response.code());
+
+        } catch (Exception e) {
+            return new ApiResult(false, e.getMessage(), e.hashCode());
+        }
+    }
+
+    // ==========================
+    // POST JSON
+    // ==========================
+    public static ApiResult httpPost(String url, String json, Map<String, String> headers) {
+        RequestBody requestBody;
+
+        if (json == null || json.isEmpty()) {
+            // POST không có body
+            requestBody = RequestBody.create(new byte[0], null);
+        } else {
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            requestBody = RequestBody.create(json, JSON);
+        }
+
+        Request.Builder builder = new Request.Builder()
+                .url(url)
+                .post(requestBody);
+
+
+        if (headers != null) {
+            for (Map.Entry<String, String> h : headers.entrySet()) {
+                builder.addHeader(h.getKey(), h.getValue());
+            }
+        }
+
+        try (Response response = client.newCall(builder.build()).execute()) {
+            String res = response.body() != null ? response.body().string() : "";
+
+            return new ApiResult(response.isSuccessful(), res, response.code());
+
+        } catch (Exception e) {
+            return new ApiResult(false, e.getMessage(), e.hashCode());
+        }
     }
 }
