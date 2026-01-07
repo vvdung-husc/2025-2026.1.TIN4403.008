@@ -1,4 +1,4 @@
-const Buffer = require('buffer/').Buffer;
+const Buffer = require('buffer').Buffer;
 const DB = require("./db/db_js.js");
 const UTILS = require('./db/utils.js');
 

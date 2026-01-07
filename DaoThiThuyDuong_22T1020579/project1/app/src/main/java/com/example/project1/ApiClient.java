@@ -1,6 +1,6 @@
 package com.example.project1;
 import android.util.Log;
-import android.view.PixelCopy;
+
 
 import okhttp3.*;
 import java.io.IOException;
@@ -46,7 +46,8 @@ public class ApiClient {
     // GET
     // ==========================
     public static ApiResult httpGet(String url, Map<String, String> headers) {
-        PixelCopy.Request.Builder builder = new Request.Builder().url(url);
+        Request.Builder builder = new Request.Builder().url(url);
+
 
         if (headers != null) {
             for (Map.Entry<String, String> h : headers.entrySet()) {
