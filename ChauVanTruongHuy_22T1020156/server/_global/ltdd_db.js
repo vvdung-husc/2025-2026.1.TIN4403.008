@@ -32,7 +32,7 @@ CDBLTDD.prototype.Init = async function () {
     }
 };
 
-// =======================
+// ======================
 // Lấy thông tin 1 user
 // =======================
 CDBLTDD.prototype.getUser = async function (user) {
