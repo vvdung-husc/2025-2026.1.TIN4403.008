@@ -32,7 +32,7 @@
     "es-object-atoms": "^1.1.1",
     "escape-html": "^1.0.3",
     "etag": "^1.8.1",
-    "express": "^5.2.1",
+    "express": "^5.1.0",
     "finalhandler": "^2.1.0",
     "forwarded": "^0.2.0",
     "fresh": "^2.0.0",
@@ -87,5 +87,6 @@
     "webidl-conversions": "^7.0.0",
     "whatwg-url": "^14.2.0",
     "wrappy": "^1.0.2"
-  }
+  },
+  "devDependencies": {}
 }
