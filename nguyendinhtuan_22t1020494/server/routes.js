@@ -64,7 +64,7 @@ app.post("/register", async function (req, res) {
         return UTILS.apiResult(0, "Tài khoản này đã có người sử dụng", res);
     }
 
-    // 3. Gọi DB để lưu (Hàm DB.Register phải có trong ltdd_db.js)
+    // 3. Gọi DB để lưu 
     const result = await DB.Register(user, pass, email, fullname); 
 
     if (result) {
@@ -109,7 +109,6 @@ async function POST_login(user, pass, res) {
     return UTILS.apiResult(-3, "Thông tin tài khoản không chính xác", res);
   }
 
-  // 3. Tạo Token (Base64)
   var user_ = {};
   user_["u"] = user;
   user_["t"] = ~~(Date.now() / 1000);
@@ -205,10 +204,9 @@ function decodeToken(token) {
     var plain = Buffer.from(token, 'base64').toString('utf8');
     //console.log(plain);
     user_ = JSON.parse(plain);
-    //console.log(user_);//Không hiển thị nếu Parse lỗi
+
   }
   catch (e) {
-    //console.log(e);
     oResult['error'] = -101;
     oResult['message'] = "Token -> JSON không hợp lệ";
     return oResult;
@@ -221,9 +219,9 @@ function decodeToken(token) {
     return oResult;
   }
 
-  //kiểm tra thời gian đã logined, tính theo seconds
+  //kiểm tra thời gian đã logined, tính theo seconds (300 seconds)
   var curSeconds = ~~(Date.now() / 1000);
-  if (curSeconds - user_.t > (60 * 5)) { //5phut
+  if (curSeconds - user_.t > (60 * 5)) { 
     oResult['error'] = -3;
     oResult['message'] = "Hết thời gian, yêu cầu đăng nhập lại để lấy token";
     return oResult;
